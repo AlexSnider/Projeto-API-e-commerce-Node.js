@@ -1,18 +1,13 @@
 const { DataTypes } = require("sequelize");
 const sequelize = require("../db/dbConection.js");
 
-const User = sequelize.define("User", {
-  username: {
-    type: DataTypes.STRING,
-    unique: true,
-    allowNull: true,
+const Categories = sequelize.define("Categories", {
+  id: {
+    type: DataTypes.INTEGER,
+    primaryKey: true,
+    autoIncrement: true,
   },
-  email: {
-    type: DataTypes.STRING,
-    unique: true,
-    allowNull: true,
-  },
-  password: {
+  name: {
     type: DataTypes.STRING,
     allowNull: false,
   },
@@ -26,4 +21,4 @@ const User = sequelize.define("User", {
   },
 });
 
-module.exports = User;
+module.exports = Categories;

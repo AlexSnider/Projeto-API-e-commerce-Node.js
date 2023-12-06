@@ -1,19 +1,22 @@
 const { DataTypes } = require("sequelize");
 const sequelize = require("../db/dbConection.js");
 
-const User = sequelize.define("User", {
-  username: {
-    type: DataTypes.STRING,
-    unique: true,
-    allowNull: true,
+const Products = sequelize.define("Products", {
+  id: {
+    type: DataTypes.INTEGER,
+    primaryKey: true,
+    autoIncrement: true,
   },
-  email: {
+  name: {
     type: DataTypes.STRING,
-    unique: true,
-    allowNull: true,
+    allowNull: false,
   },
-  password: {
-    type: DataTypes.STRING,
+  unit_price: {
+    type: DataTypes.FLOAT,
+    allowNull: false,
+  },
+  stock: {
+    type: DataTypes.INTEGER,
     allowNull: false,
   },
   createdAt: {
@@ -26,4 +29,4 @@ const User = sequelize.define("User", {
   },
 });
 
-module.exports = User;
+module.exports = Products;
