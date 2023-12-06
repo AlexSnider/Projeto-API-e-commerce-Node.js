@@ -1,0 +1,35 @@
+* {
+  padding: 0;
+  margin: 0;
+  font-family: Helvetica;
+}
+
+body .app,
+div {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.7rem;
+}
+
+h1 {
+  margin-bottom: 1rem;
+  margin-top: 2rem;
+
+}
+
+.login {
+  margin-top: 3rem;
+}
+
+input {
+  font-size: 32px;
+  outline: none;
+}
+
+button {
+  margin-top: 1rem;
+  font-size: 28px;
+  padding: 10px;
+}
