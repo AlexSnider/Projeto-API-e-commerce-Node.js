@@ -25,7 +25,11 @@ app.use(
 app.use(cookieParser());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-app.use(
+app.listen(3002, () => {
+  console.log("Server is running on port 3002");
+});
+
+/* app.use(
   session({
     key: "userId",
     secret: "secret",
@@ -118,8 +122,4 @@ app.get("/login", (req, res) => {
   } else {
     res.send({ loggedIn: false });
   }
-});
-
-app.listen(3002, () => {
-  console.log("Server is running on port 3002");
-});
+}); */
