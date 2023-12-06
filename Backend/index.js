@@ -1,18 +1,19 @@
-const DB = require("./DB/dbConection.js");
+const dotenv = require("dotenv");
+dotenv.config();
+
+const PORT = process.env.PORT || 3000;
 
 const express = require("express");
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
-const session = require("express-session");
 const bodyParser = require("body-parser");
-const bcrypt = require("bcrypt");
-const saltRounds = 10;
-const jwt = require("jsonwebtoken");
-/* const User = require("./Models/User.js"); */
+
+const userController = require("./app/routes/userRoute");
 
 const app = express();
 
 app.use(bodyParser.json());
+app.use(cookieParser());
 
 app.use(
   cors({
@@ -22,11 +23,10 @@ app.use(
   })
 );
 
-app.use(cookieParser());
-app.use(bodyParser.urlencoded({ extended: true }));
+app.post("/register", userController);
 
-app.listen(3002, () => {
-  console.log("Server is running on port 3002");
+app.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}`);
 });
 
 /* app.use(
@@ -40,29 +40,6 @@ app.listen(3002, () => {
     },
   })
 );
-
-app.post("/register", (req, res) => {
-  const username = req.body.username;
-  const password = req.body.password;
-
-  bcrypt.hash(password, saltRounds, (err, hash) => {
-    if (err) {
-      res.status(400).json({ error: err });
-    }
-
-    DB.query(
-      "INSERT INTO users (user, password) VALUES (?, ?)",
-      [username, hash],
-      (err, result) => {
-        if (err) {
-          res.status(400).json({ error: err });
-        } else {
-          res.status(200).json({ result, message: "User created!" });
-        }
-      }
-    );
-  });
-});
 
 const verifyJWT = (req, res, next) => {
   const token = req.headers["x-access-token"];
