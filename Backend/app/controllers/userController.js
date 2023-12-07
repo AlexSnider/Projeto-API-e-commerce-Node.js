@@ -1,7 +1,7 @@
-const bcrypt = require("bcrypt");
 const User = require("../../models/User");
-const saltRounds = 10;
 const { createToken } = require("../../JWT/JWT");
+const bcrypt = require("bcrypt");
+const saltRounds = 10;
 
 const userController = {};
 
