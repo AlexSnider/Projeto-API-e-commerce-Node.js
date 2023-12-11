@@ -11,6 +11,10 @@ const Products = sequelize.define("Products", {
     type: DataTypes.STRING,
     allowNull: false,
   },
+  description: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
   unit_price: {
     type: DataTypes.FLOAT,
     allowNull: false,
@@ -18,6 +22,14 @@ const Products = sequelize.define("Products", {
   stock: {
     type: DataTypes.INTEGER,
     allowNull: false,
+  },
+  categoryId: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+    references: {
+      model: "categories",
+      key: "id",
+    },
   },
   createdAt: {
     type: DataTypes.DATE,

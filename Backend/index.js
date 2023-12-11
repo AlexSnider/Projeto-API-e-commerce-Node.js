@@ -9,6 +9,8 @@ const cookieParser = require("cookie-parser");
 const bodyParser = require("body-parser");
 
 const userController = require("./app/routes/userRoute");
+const productsController = require("./app/routes/productsRoute");
+const categoriesController = require("./app/routes/categoriesRoute");
 
 const app = express();
 
@@ -25,10 +27,26 @@ app.use(
   })
 );
 
+// USER ROUTES
 app.post("/register", userController);
 app.post("/login", userController);
 app.post("/logout", userController);
 
+// PRODUCT ROUTES
+app.post("/products", productsController);
+app.get("/products", productsController);
+app.get("/products/:id", productsController);
+app.put("/products/:id", productsController);
+app.delete("/products/:id", productsController);
+
+// CATEGORIES ROUTES
+app.post("/categories", categoriesController);
+app.get("/categories", categoriesController);
+app.get("/categories/:id", categoriesController);
+app.put("/categories/:id", categoriesController);
+app.delete("/categories/:id", categoriesController);
+
+// PAYMENT ROUTES
 app.get("/payment", verifyToken, (req, res) => {
   res.send("You've done it!");
 });
