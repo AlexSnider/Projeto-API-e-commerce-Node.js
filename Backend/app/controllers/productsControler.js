@@ -1,4 +1,5 @@
 const Products = require("../../models/Products");
+const Categories = require("../../models/Categories");
 
 const productsController = {};
 
@@ -11,9 +12,24 @@ productsController.createProduct = async (req, res) => {
     }
 
     const existingProduct = await Products.findOne({ where: { name } });
+    const existingCategory = await Categories.findOne({
+      where: { id: categoryId },
+    });
 
     if (existingProduct) {
-      return res.status(400).json({ message: "Product already exists" });
+      return res.status(400).json({
+        message:
+          "Product already exists or it's name is the same as another product already created",
+      });
+    }
+
+    const categories = await Categories.findAll();
+
+    if (!existingCategory) {
+      return res.status(404).json({
+        message: "Category not found. Try again selecting a valid category",
+        categories,
+      });
     }
 
     const product = await Products.create({

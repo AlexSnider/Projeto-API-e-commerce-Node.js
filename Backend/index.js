@@ -10,10 +10,11 @@ const cors = require("cors");
 const cookieParser = require("cookie-parser");
 const bodyParser = require("body-parser");
 
-// CONTROLLERS
+// ROUTES
 const userController = require("./app/routes/userRoute");
 const productsController = require("./app/routes/productsRoute");
 const categoriesController = require("./app/routes/categoriesRoute");
+const ordersController = require("./app/routes/ordersRoute");
 
 // EXPRESS
 const app = express();
@@ -52,6 +53,13 @@ app.get("/categories", categoriesController);
 app.get("/categories/:id", categoriesController);
 app.put("/categories/:id", categoriesController);
 app.delete("/categories/:id", categoriesController);
+
+//ORDERS ROUTES
+app.post("/orders", ordersController);
+app.put("/orders/:id", ordersController);
+app.get("/orders", ordersController);
+app.get("/orders/:id", ordersController);
+app.get("/ordersItens", ordersController);
 
 // PAYMENT ROUTES
 app.get("/payment", verifyToken, (req, res) => {
