@@ -16,7 +16,7 @@ ordersController.createOrder = async (req, res) => {
     }
 
     await sequelize.transaction(async (t) => {
-      let total_price = 0;
+      let order_total_price = 0;
 
       for (const item of items) {
         const product = await Products.findByPk(item.productId, { transaction: t });
@@ -33,10 +33,10 @@ ordersController.createOrder = async (req, res) => {
           });
         }
 
-        total_price += item.quantity * product.unit_price;
+        order_total_price += item.quantity * product.unit_price;
       }
 
-      if (total_price <= 0) {
+      if (order_total_price <= 0) {
         return res.status(400).json({
           message: "Total price must be greater than zero to create an order.",
         });
@@ -53,7 +53,7 @@ ordersController.createOrder = async (req, res) => {
           userId: user.id,
           status,
           payment_method,
-          total_price,
+          order_total_price,
         },
         { transaction: t }
       );
@@ -80,7 +80,7 @@ ordersController.createOrder = async (req, res) => {
         return res.status(201).json({
           message: "Order created successfully",
           order,
-          total_price,
+          order_total_price,
           ordersItems: items,
         });
       }
@@ -92,52 +92,52 @@ ordersController.createOrder = async (req, res) => {
 
 ordersController.updateOrder = async (req, res) => {
   try {
-    const { status, payment_method } = req.body;
-
     const order = await Orders.findOne({ where: { id: req.params.id } });
 
     if (!order) {
       return res.status(404).json({ message: "Order not found" });
     }
 
-    const updateAttributes = {
-      status,
-      payment_method,
-    };
+    const { status } = req.body;
 
-    for (const key of Object.keys(updateAttributes)) {
-      if (updateAttributes[key] !== undefined) {
-        const updateObj = { [key]: updateAttributes[key] };
+    if (status === undefined || status === order.status) {
+      return res.status(400).json({
+        message:
+          "Status field must be provided for update or status must be different from current status",
+      });
+    }
 
-        await Orders.update(updateObj, { where: { id: req.params.id } });
-      } else {
-        return res.status(400).json({ message: "At least one field must be provided" });
-      }
+    if (status === "paid" || (status === "pending" && order.status === "canceled")) {
+      return res.status(400).json({
+        message: "Order status cannot be updated to paid or pending when canceled",
+      });
     }
 
     if (status === "paid" && order.status === "pending") {
+      await Orders.update({ status: status }, { where: { id: req.params.id } });
+    } else if (status === "canceled") {
+      await Orders.update({ status: status }, { where: { id: req.params.id } });
+
       const ordersItems = await OrdersItems.findAll({
         where: { orderId: req.params.id },
       });
 
       for (const item of ordersItems) {
-        const product = await Products.findOne({ where: { id: item.productId } });
-
-        if (!product) {
-          return res
-            .status(404)
-            .json({ message: "Product not found. Please try again." });
-        } else {
-          await Orders.update({ status: "paid" }, { where: { id: req.params.id } });
-        }
+        const product = await Products.findByPk(item.productId);
+        await product.update(
+          { stock: product.stock + item.quantity },
+          { where: { id: item.productId } }
+        );
       }
+
+      return res.status(200).json({ message: "Order canceled successfully" });
     }
 
-    res.status(200).json({ message: "Order updated successfully" });
+    res.status(200).json({ message: "Order status updated successfully" });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
-}; //TESTAR
+};
 
 ordersController.getOrders = async (req, res) => {
   try {

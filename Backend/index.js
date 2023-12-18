@@ -59,7 +59,6 @@ app.post("/orders", ordersController);
 app.put("/orders/:id", ordersController);
 app.get("/orders", ordersController);
 app.get("/orders/:id", ordersController);
-app.get("/ordersItens", ordersController);
 
 // PAYMENT ROUTES
 app.get("/payment", verifyToken, (req, res) => {

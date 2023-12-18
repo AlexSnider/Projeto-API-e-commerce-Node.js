@@ -23,7 +23,7 @@ module.exports = (sequelize) => {
     payment_method: {
       type: DataTypes.STRING,
     },
-    total_price: {
+    order_total_price: {
       type: DataTypes.FLOAT,
       allowNull: false,
     },

@@ -91,17 +91,17 @@ productsController.updateProduct = async (req, res) => {
       categoryId,
     };
 
-    Object.keys(updateAttributes).forEach(async (key) => {
-      if (updateAttributes[key] !== undefined) {
+    for (const key of Object.keys(updateAttributes)) {
+      if (updateAttributes[key] !== undefined || updateAttributes[key] !== "") {
         const updateObj = { [key]: updateAttributes[key] };
 
         await Products.update(updateObj, { where: { id } });
       } else {
-        res.status(400).json({
+        return res.status(400).json({
           message: "At least one field must be provided",
         });
       }
-    });
+    }
 
     res.status(200).json({ message: "Product updated successfully" });
   } catch (error) {
