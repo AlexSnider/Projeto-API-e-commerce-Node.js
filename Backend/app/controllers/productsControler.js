@@ -72,6 +72,20 @@ productsController.getProductById = async (req, res) => {
   }
 };
 
+productsController.getProductsByCategory = async (req, res) => {
+  try {
+    const { categoryId } = req.params;
+
+    const products = await Products.findAll({
+      where: { categoryId },
+    });
+
+    res.status(200).json(products);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
 productsController.updateProduct = async (req, res) => {
   try {
     const { id } = req.params;

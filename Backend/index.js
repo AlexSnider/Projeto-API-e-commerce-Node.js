@@ -15,6 +15,7 @@ const userController = require("./app/routes/userRoute");
 const productsController = require("./app/routes/productsRoute");
 const categoriesController = require("./app/routes/categoriesRoute");
 const ordersController = require("./app/routes/ordersRoute");
+const ordersItensController = require("./app/routes/ordersItensRoute");
 
 // EXPRESS
 const app = express();
@@ -38,12 +39,14 @@ app.use(
 // USER ROUTES
 app.post("/register", userController);
 app.post("/login", userController);
+app.put("/updatepassword/:id", userController);
 app.post("/logout", userController);
 
 // PRODUCT ROUTES
 app.post("/products", productsController);
 app.get("/products", productsController);
 app.get("/products/:id", productsController);
+app.get("/products/category/:categoryId", productsController);
 app.put("/products/:id", productsController);
 app.delete("/products/:id", productsController);
 
@@ -54,11 +57,15 @@ app.get("/categories/:id", categoriesController);
 app.put("/categories/:id", categoriesController);
 app.delete("/categories/:id", categoriesController);
 
-//ORDERS ROUTES
+// ORDERS ROUTES
 app.post("/orders", ordersController);
 app.put("/orders/:id", ordersController);
 app.get("/orders", ordersController);
 app.get("/orders/:id", ordersController);
+
+//ORDERSITENS ROUTES
+app.get("/ordersitens", ordersItensController);
+app.get("/ordersitens/:id", ordersItensController);
 
 // PAYMENT ROUTES
 app.get("/payment", verifyToken, (req, res) => {

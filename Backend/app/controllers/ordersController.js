@@ -4,6 +4,9 @@ const Orders = createOrdersModel(sequelize);
 const Products = require("../../models/Products.js");
 const OrdersItems = require("../../models/OrdersItens.js");
 const User = require("../../models/User.js");
+const sendEmail = require("../mail/nodeMailer.js");
+const dotenv = require("dotenv");
+dotenv.config();
 
 const ordersController = {};
 
@@ -77,6 +80,8 @@ ordersController.createOrder = async (req, res) => {
       }
 
       if (status === "pending" || status === "paid") {
+        sendEmail(user, status, order_total_price, payment_method, items);
+
         return res.status(201).json({
           message: "Order created successfully",
           order,

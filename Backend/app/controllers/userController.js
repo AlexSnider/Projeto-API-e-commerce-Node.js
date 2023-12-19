@@ -33,6 +33,8 @@ userController.createUser = async (req, res) => {
   }
 };
 
+userController.changePassword = async (req, res) => {};
+
 userController.loginUser = async (req, res) => {
   try {
     const { username, password } = req.body;
