@@ -113,7 +113,7 @@ ordersController.updateOrder = async (req, res) => {
       });
     }
 
-    if (status === "paid" || (status === "pending" && order.status === "canceled")) {
+    if (status === "paid" && order.status === "canceled") {
       return res.status(400).json({
         message: "Order status cannot be updated to paid or pending when canceled",
       });
