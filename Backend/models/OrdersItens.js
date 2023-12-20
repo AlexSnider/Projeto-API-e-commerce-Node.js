@@ -13,7 +13,7 @@ const OrdersItens = sequelize.define("OrdersItens", {
     references: {
       model: "Orders",
       key: "id",
-    }
+    },
   },
   productId: {
     type: DataTypes.INTEGER,
@@ -21,6 +21,14 @@ const OrdersItens = sequelize.define("OrdersItens", {
     references: {
       model: "Products",
       key: "id",
+    },
+  },
+  productName: {
+    type: DataTypes.STRING,
+    allowNull: false,
+    references: {
+      model: "Products",
+      key: "name",
     }
   },
   quantity: {
@@ -36,7 +44,5 @@ const OrdersItens = sequelize.define("OrdersItens", {
     defaultValue: DataTypes.NOW,
   },
 });
-
-
 
 module.exports = OrdersItens;

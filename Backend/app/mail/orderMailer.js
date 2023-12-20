@@ -25,7 +25,7 @@ function sendEmail(user, status, order_total_price, payment_method, items) {
       ${items
         .map(
           (item) =>
-            `<li style="list-style: none;"> Product: ${item.productId} <br/> Quantity: ${item.quantity}</li>`
+            `<li style="list-style: none;"> Product: ${item.productName} <br/> Quantity: ${item.quantity}</li>`
         )
         .join("")}
       <ul/>

@@ -4,7 +4,7 @@ const Orders = createOrdersModel(sequelize);
 const Products = require("../../models/Products.js");
 const OrdersItems = require("../../models/OrdersItens.js");
 const User = require("../../models/User.js");
-const sendEmail = require("../mail/nodeMailer.js");
+const sendEmail = require("../mail/orderMailer.js");
 const dotenv = require("dotenv");
 dotenv.config();
 
@@ -68,6 +68,7 @@ ordersController.createOrder = async (req, res) => {
           {
             orderId: order.id,
             productId: product.id,
+            productName: product.name,
             quantity: item.quantity,
           },
           { transaction: t }
