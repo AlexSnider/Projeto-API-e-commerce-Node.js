@@ -20,18 +20,27 @@ function sendEmail(user, status, order_total_price, payment_method, items) {
       <p>Your total price is $${order_total_price}.</p>
       <p>Payment method is ${payment_method}.</p>
       <p>Order items:</p>
-      <div>
-      <ul>
-      ${items
-        .map(
-          (item) =>
-            `<li style="list-style: none;"> Product: ${item.productName} <br/> Quantity: ${item.quantity}</li>`
-        )
-        .join("")}
-      <ul/>
-      </div>
-      <h1>Thank you for using our service.</h1>
-      `,
+      <table style="width:20%; border-collapse: collapse; margin-top: 10px;">
+        <thead>
+          <tr>
+            <th style="border: 1px solid #dddddd; text-align: center; padding: 8px;">Product</th>
+            <th style="border: 1px solid #dddddd; text-align: center; padding: 8px;">Quantity</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${items
+            .map(
+              (item) =>
+                `<tr>
+                   <td style="border: 1px solid #dddddd; text-align: center; padding: 8px;">${item.productName}</td>
+                   <td style="border: 1px solid #dddddd; text-align: center; padding: 8px;">${item.quantity}</td>
+                 </tr>`
+            )
+            .join("")}
+        </tbody>
+      </table>
+      <h1>Thank you for buying with us.</h1>
+    `,
   };
 
   transporter.sendMail(mailOptions, (err, info) => {

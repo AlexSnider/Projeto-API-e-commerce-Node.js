@@ -4,9 +4,9 @@ const Orders = createOrdersModel(sequelize);
 const Products = require("../../models/Products.js");
 const OrdersItems = require("../../models/OrdersItens.js");
 const User = require("../../models/User.js");
-const sendEmail = require("../mail/orderMailer.js");
 const dotenv = require("dotenv");
 dotenv.config();
+const sendEmail = require("../mail/orderMailer.js");
 
 const ordersController = {};
 
@@ -164,6 +164,37 @@ ordersController.getOrderById = async (req, res) => {
     }
 
     res.status(200).json(order);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+ordersController.getOrdersItensByOrderId = async (req, res) => {
+  try {
+    const order = await Orders.findOne({ where: { id: req.params.id } });
+
+    const ordersItems = await OrdersItems.findAll({
+      where: { orderId: req.params.id },
+    });
+
+    const combinedData = {
+      order: {
+        id: order.id,
+        userId: order.userId,
+        status: order.status,
+        payment_method: order.payment_method,
+        order_total_price: order.order_total_price,
+      },
+      ordersItems: ordersItems.map((item) => ({
+        id: item.id,
+        orderId: item.orderId,
+        productId: item.productId,
+        productName: item.productName,
+        quantity: item.quantity,
+      })),
+    };
+
+    res.status(200).json(combinedData);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
