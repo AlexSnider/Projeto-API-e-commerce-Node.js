@@ -66,7 +66,7 @@ userController.changePassword = async (req, res) => {
 
     sendEmail(email, username, resetToken);
 
-    res.status(200).json({ message: "Password reset link has been sent to your email." });
+    res.status(200).json({ message: "Password reset link has been sent to the E-mail registered." });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }

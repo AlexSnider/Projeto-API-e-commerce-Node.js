@@ -104,6 +104,91 @@
           }
         }
       }
+    },
+    "/changepassword": {
+      "put": {
+        "tags": ["User"],
+        "description": "Send request to change user password.",
+        "requestBody": {
+          "description": "Necessary data to change user password.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RequestChangePassword"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Send request to change user password.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseChangePassword"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "All fields are required."
+          },
+          "404": {
+            "description": "Email or username not found."
+          },
+          "500": {
+            "description": "Internal server error."
+          }
+        }
+      }
+    },
+    "/reset-password/{token}": {
+      "post": {
+        "tags": ["User"],
+        "parameters": [
+          {
+            "name": "token",
+            "in": "path",
+            "required": true,
+            "description": "The token provided by the user.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "description": "Send request to reset user password.",
+        "requestBody": {
+          "description": "Necessary data to reset user password.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RequestResetPassword"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Password reseted successfully.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseResetPassword"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Token not provided."
+          },
+          "404": {
+            "description": "Email or username not found."
+          },
+          "500": {
+            "description": "Internal server error."
+          }
+        }
+      }
     }
   },
   "components": {
@@ -195,6 +280,51 @@
             "type": "string",
             "description": "Logout message.",
             "example": "User logged out successfully and token deleted."
+          }
+        }
+      },
+      "RequestChangePassword": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "description": "User E-mail.",
+            "example": "anytsh8@gmail.com"
+          },
+          "username": {
+            "type": "string",
+            "description": "User name.",
+            "example": "alex oliveira"
+          }
+        }
+      },
+      "ResponseChangePassword": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "description": "Change password message.",
+            "example": "Password reset link has been sent to the E-mail registered."
+          }
+        }
+      },
+      "RequestResetPassword": {
+        "type": "object",
+        "properties": {
+          "password": {
+            "type": "string",
+            "description": "User new password.",
+            "example": "aleX321%#!"
+          }
+        }
+      },
+      "ResponseResetPassword": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "description": "Reset password message.",
+            "example": "Password changed successfully."
           }
         }
       }
