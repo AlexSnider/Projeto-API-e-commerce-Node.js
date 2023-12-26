@@ -5,6 +5,7 @@ import Axios from "axios";
 function App() {
   const [userName, setUserName] = useState("");
   const [password, setPassword] = useState("");
+  const [email, setEmail] = useState("");
 
   const [userNameLogin, setUserNameLogin] = useState("");
   const [passwordLogin, setPasswordLogin] = useState("");
@@ -16,6 +17,7 @@ function App() {
   const register = () => {
     Axios.post("http://localhost:3002/register", {
       username: userName,
+      email: email,
       password: password,
     }).then((res) => {
       console.log(res);
@@ -25,6 +27,7 @@ function App() {
   const login = () => {
     Axios.post("http://localhost:3002/login", {
       username: userNameLogin,
+      email: email,
       password: passwordLogin,
     }).then((res) => {
       if (!res.data.auth) {
@@ -38,15 +41,17 @@ function App() {
   };
 
   const userAuthd = () => {
-    Axios.get("http://localhost:3002/isAuth", { headers: {
-      "x-access-token": localStorage.getItem("token")
-    }}).then((res) => {
+    Axios.get("http://localhost:3002/isAuth", {
+      headers: {
+        "x-access-token": localStorage.getItem("token"),
+      },
+    }).then((res) => {
       if (res.data.loggedIn == true) {
         console.log(res.data);
         setLoginStatus(res.data.username);
       }
     });
-  }
+  };
 
   /* useEffect(() => {
     Axios.get("http://localhost:3002/login").then((res) => {
@@ -66,6 +71,12 @@ function App() {
           placeholder="Username"
           onChange={(e) => setUserName(e.target.value)}
         />
+        <label>Email</label>
+        <input
+          type="email"
+          placeholder="Email"
+          onChange={(e) => setEmail(e.target.value)}
+        />
         <label>Password</label>
         <input
           type="text"
@@ -77,15 +88,15 @@ function App() {
 
       <div className="login">
         <h1>Login</h1>
-        <label>Login Name</label>
+        <label>Login</label>
         <input
           type="text"
-          placeholder="Username"
+          placeholder="Username or Email"
           onChange={(e) => setUserNameLogin(e.target.value)}
         />
         <label>Password</label>
         <input
-          type="text"
+          type="password"
           placeholder="Password"
           onChange={(e) => setPasswordLogin(e.target.value)}
         />

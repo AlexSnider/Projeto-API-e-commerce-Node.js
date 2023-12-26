@@ -9,18 +9,21 @@ const cors = require("cors");
 const cookieParser = require("cookie-parser");
 const bodyParser = require("body-parser");
 
+// SWAGGER
+const swaggerUI = require("swagger-ui-express");
+
 // ROUTES CONTROLLERS
 const userController = require("./app/routes/userRoute");
 const productsController = require("./app/routes/productsRoute");
 const categoriesController = require("./app/routes/categoriesRoute");
 const ordersController = require("./app/routes/ordersRoute");
-const ordersItensController = require("./app/routes/ordersItensRoute");
 
 const app = express();
 
 // MIDDLEWARE
 app.use(bodyParser.json());
 app.use(cookieParser());
+app.use("/api-docs", swaggerUI.serve, swaggerUI.setup(require("./swagger.json")));
 
 // JWT
 const { verifyToken } = require("./JWT/JWT");

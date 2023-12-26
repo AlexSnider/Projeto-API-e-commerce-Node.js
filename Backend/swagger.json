@@ -1,0 +1,97 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "API mini e-commerce",
+    "description": "API para o projeto de mini e-commerce.",
+    "contact": {
+      "name": "Support",
+      "email": "alexsnider8@gmail.com"
+    },
+    "version": "1.0.0"
+  },
+  "paths": {
+    "/register": {
+      "post": {
+        "tags": ["User"],
+        "description": "Register a new user.",
+        "requestBody": {
+          "description": "Necessary data to register a new user.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RequestRegister"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "User registered successfully.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseRegister"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Insuficient data or user already exists."
+          },
+          "500": {
+            "description": "Internal server error."
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "RequestRegister": {
+        "type": "object",
+        "properties": {
+          "username": {
+            "type": "string",
+            "description": "User name.",
+            "example": "alex oliveira"
+          },
+          "email": {
+            "type": "string",
+            "description": "User E-mail.",
+            "example": "alex@gmail.com"
+          },
+          "password": {
+            "type": "string",
+            "description": "User password.",
+            "example": "aleX321%#!"
+          }
+        }
+      },
+      "ResponseRegister": {
+        "type": "object",
+        "properties": {
+          "username": {
+            "type": "string",
+            "description": "User name.",
+            "example": "alex oliveira"
+          },
+          "email": {
+            "type": "string",
+            "description": "User E-mail.",
+            "example": "alex@gmail.com"
+          },
+          "password": {
+            "type": "string",
+            "description": "User password.",
+            "example": "aleX321%#!"
+          },
+          "id": {
+            "type": "string",
+            "description": "User ID.",
+            "format": "uuid"
+          }
+        }
+      }
+    }
+  }
+}
