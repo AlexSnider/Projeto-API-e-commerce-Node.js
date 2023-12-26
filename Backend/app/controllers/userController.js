@@ -127,7 +127,7 @@ userController.loginUser = async (req, res) => {
     const user = await User.findOne({ where: { username } });
 
     if (!user) {
-      return res.status(401).json({ message: "Invalid credentials" });
+      return res.status(404).json({ message: "User not found" });
     }
 
     const isPasswordValid = await bcrypt.compare(password, user.password);
@@ -157,6 +157,12 @@ userController.loginUser = async (req, res) => {
 
 userController.logoutUser = async (req, res) => {
   try {
+    const accessToken = req.cookies["access_token"];
+
+    if (!accessToken) {
+      return res.status(404).json({ message: "No token was provided" });
+    }
+
     res.clearCookie("access_token");
     res.status(200).json({ message: "Logout successful" });
   } catch (error) {

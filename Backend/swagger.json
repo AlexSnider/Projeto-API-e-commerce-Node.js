@@ -43,6 +43,67 @@
           }
         }
       }
+    },
+    "/login": {
+      "post": {
+        "tags": ["User"],
+        "description": "Login a user.",
+        "requestBody": {
+          "description": "Necessary data to login a user.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RequestLogin"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "User logged successfully.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseLogin"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "All fields are required."
+          },
+          "401": {
+            "description": "Invalid credentials ."
+          },
+          "404": {
+            "description": "User not found."
+          },
+          "500": {
+            "description": "Internal server error."
+          }
+        }
+      }
+    },
+    "/logout": {
+      "post": {
+        "tags": ["User"],
+        "description": "Logout a user.",
+        "responses": {
+          "200": {
+            "description": "User logged out successfully.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseLogout"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No token was provided."
+          }
+        }
+      }
     }
   },
   "components": {
@@ -89,6 +150,51 @@
             "type": "string",
             "description": "User ID.",
             "format": "uuid"
+          }
+        }
+      },
+      "RequestLogin": {
+        "type": "object",
+        "properties": {
+          "username": {
+            "type": "string",
+            "description": "User name.",
+            "example": "alex oliveira"
+          },
+          "password": {
+            "type": "string",
+            "description": "User password.",
+            "example": "aleX321%#!"
+          },
+          "token": {
+            "type": "string",
+            "description": "User token.",
+            "example": ""
+          }
+        }
+      },
+      "ResponseLogin": {
+        "type": "object",
+        "properties": {
+          "username": {
+            "type": "string",
+            "description": "User name.",
+            "example": "alex oliveira"
+          },
+          "password": {
+            "type": "string",
+            "description": "User password.",
+            "example": "aleX321%#!"
+          }
+        }
+      },
+      "ResponseLogout": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "description": "Logout message.",
+            "example": "User logged out successfully and token deleted."
           }
         }
       }
