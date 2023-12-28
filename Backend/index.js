@@ -40,29 +40,29 @@ app.use(
 // USER ROUTES
 app.post("/register", userController);
 app.post("/login", userController);
-app.put("/changepassword", userController);
+app.put("/change-password", userController);
 app.post("/reset-password/:token", userController);
 app.post("/logout", userController);
 
 // PRODUCT ROUTES
 app.post("/products", productsController);
-app.get("/products", productsController);
+app.get("/all-products", productsController);
 app.get("/products/:id", productsController);
-app.get("/products/category/:categoryId", productsController);
-app.put("/products/:id", productsController);
-app.delete("/products/:id", productsController);
+app.get("/products/category/:category-id", productsController);
+app.put("/update-product/:id", productsController);
+app.delete("/delete-product/:id", productsController);
 
 // CATEGORIES ROUTES
 app.post("/categories", categoriesController);
-app.get("/categories", categoriesController);
+app.get("/all-categories", categoriesController);
 app.get("/categories/:id", categoriesController);
-app.put("/categories/:id", categoriesController);
-app.delete("/categories/:id", categoriesController);
+app.put("/update-category/:id", categoriesController);
+app.delete("/delete-category/:id", categoriesController);
 
 // ORDERS ROUTES
 app.post("/orders", ordersController);
 app.put("/orders/:id", ordersController);
-app.get("/orders", ordersController);
+app.get("/all-orders", ordersController);
 app.get("/orders/:id", ordersController);
 app.get("/orders/orders-items/:id", ordersController);
 

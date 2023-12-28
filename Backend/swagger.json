@@ -105,7 +105,7 @@
         }
       }
     },
-    "/changepassword": {
+    "/change-password": {
       "put": {
         "tags": ["User"],
         "description": "Send request to change user password.",
@@ -183,6 +183,220 @@
           },
           "404": {
             "description": "Email or username not found."
+          },
+          "500": {
+            "description": "Internal server error."
+          }
+        }
+      }
+    },
+    "/categories": {
+      "post": {
+        "tags": ["Categories"],
+        "description": "Create a category.",
+        "requestBody": {
+          "description": "Necessary data to create a category.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RequestCategory"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Category created successfully.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseCategory"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Insuficient data or category already exists."
+          },
+          "500": {
+            "description": "Internal server error."
+          }
+        }
+      }
+    },
+    "/all-categories": {
+      "get": {
+        "tags": ["Categories"],
+        "description": "Get all categories.",
+        "responses": {
+          "200": {
+            "description": "Get all categories.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseGetAllCategories"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error."
+          }
+        }
+      }
+    },
+    "/categories/{id}": {
+      "get": {
+        "tags": ["Categories"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "The id of the category.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "description": "Get a category by it's id.",
+        "responses": {
+          "200": {
+            "description": "Get a category by it's id.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseCategory"
+                },
+                "example": {
+                  "id": 10,
+                  "name": "Computadores"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Category not found."
+          },
+          "500": {
+            "description": "Internal server error."
+          }
+        }
+      }
+    },
+    "/update-category/{id}": {
+      "put": {
+        "tags": ["Categories"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "The id of the category.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "description": "Update a category.",
+        "requestBody": {
+          "description": "Necessary data to update a category.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RequestUpdateCategory"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Category updated successfully.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseUpdateCategory"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Insuficient data or category already exists."
+          },
+          "404": {
+            "description": "Category not found."
+          },
+          "500": {
+            "description": "Internal server error."
+          }
+        }
+      }
+    },
+    "/delete-category/{id}": {
+      "delete": {
+        "tags": ["Categories"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "The id of the category.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "description": "Delete a category.",
+        "responses": {
+          "200": {
+            "description": "Category deleted successfully.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseDeleteCategory"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Category not found."
+          },
+          "500": {
+            "description": "Internal server error."
+          }
+        }
+      }
+    },
+    "/products": {
+      "post": {
+        "tags": ["Products"],
+        "description": "Create a new product.",
+        "requestBody": {
+          "description": "Necessary data to create a new product.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RequestCreateProduct"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Product created successfully.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseCreateProduct"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Insuficient data, category or product already exists."
+          },
+          "404": {
+            "description": "Category not found."
           },
           "500": {
             "description": "Internal server error."
@@ -325,6 +539,115 @@
             "type": "string",
             "description": "Reset password message.",
             "example": "Password changed successfully."
+          }
+        }
+      },
+      "RequestCategory": {
+        "type": "object",
+        "properties": {
+          "category_name": {
+            "type": "string",
+            "description": "Category name.",
+            "example": "Computadores"
+          }
+        }
+      },
+      "ResponseCategory": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Category name.",
+            "example": "Computadores"
+          }
+        }
+      },
+      "ResponseGetAllCategories": {
+        "type": "object",
+        "properties": {
+          "categories": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ResponseCategory"
+            }
+          }
+        }
+      },
+      "ResponseGetOneCategory": {
+        "type": "object",
+        "properties": {
+          "category": {
+            "$ref": "#/components/schemas/ResponseCategory"
+          }
+        }
+      },
+      "RequestUpdateCategory": {
+        "type": "object",
+        "properties": {
+          "category_name": {
+            "type": "string",
+            "description": "Category name.",
+            "example": "Computadores"
+          }
+        }
+      },
+      "ResponseUpdateCategory": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "description": "Update category message.",
+            "example": "Category updated successfully."
+          }
+        }
+      },
+      "ResponseDeleteCategory": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "description": "Delete category message.",
+            "example": "Category deleted successfully."
+          }
+        }
+      },
+      "RequestCreateProduct": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Product name.",
+            "example": "Notebook"
+          },
+          "description": {
+            "type": "string",
+            "description": "Product description.",
+            "example": "Notebook gamer"
+          },
+          "unit_price": {
+            "type": "number",
+            "description": "Product unit price.",
+            "example": 2000
+          },
+          "stock": {
+            "type": "number",
+            "description": "Product stock.",
+            "example": 10
+          },
+          "categoryId": {
+            "type": "number",
+            "description": "Product category id.",
+            "example": 11
+          }
+        }
+      },
+      "ResponseCreateProduct": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "description": "Create product message.",
+            "example": "Product created successfully."
           }
         }
       }
