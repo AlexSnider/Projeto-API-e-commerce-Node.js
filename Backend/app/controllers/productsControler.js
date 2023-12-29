@@ -80,6 +80,16 @@ productsController.getProductsByCategory = async (req, res) => {
       where: { categoryId },
     });
 
+    const category = await Categories.findAll();
+
+    if (!category) {
+      return res.status(404).json({ message: "Category not found" });
+    }
+
+    if (products.length === 0) {
+      return res.status(404).json({ message: "No products found in this category" });
+    }
+
     res.status(200).json(products);
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -105,16 +115,24 @@ productsController.updateProduct = async (req, res) => {
       categoryId,
     };
 
-    for (const key of Object.keys(updateAttributes)) {
-      if (updateAttributes[key] !== undefined || updateAttributes[key] !== "") {
-        const updateObj = { [key]: updateAttributes[key] };
+    let attributesFound = false;
 
+    for (const key of Object.keys(updateAttributes)) {
+      if (
+        updateAttributes[key] !== undefined &&
+        updateAttributes[key] !== " " &&
+        updateAttributes[key] !== null
+      ) {
+        const updateObj = { [key]: updateAttributes[key] };
         await Products.update(updateObj, { where: { id } });
-      } else {
-        return res.status(400).json({
-          message: "At least one field must be provided",
-        });
+        attributesFound = true;
       }
+    }
+
+    if (!attributesFound) {
+      return res.status(400).json({
+        message: "At least one field must be provided",
+      });
     }
 
     res.status(200).json({ message: "Product updated successfully" });

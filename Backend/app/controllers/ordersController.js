@@ -92,7 +92,13 @@ ordersController.createOrder = async (req, res) => {
       }
     });
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    if (error instanceof CustomValidationException) {
+      res.status(400).json({ message: error.message });
+    } else if (error instanceof NotFoundException) {
+      res.status(404).json({ message: error.message });
+    } else {
+      res.status(500).json({ message: error.message });
+    }
   }
 };
 
@@ -141,13 +147,23 @@ ordersController.updateOrder = async (req, res) => {
 
     res.status(200).json({ message: "Order status updated successfully" });
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    if (error instanceof CustomValidationException) {
+      res.status(400).json({ message: error.message });
+    } else if (error instanceof NotFoundException) {
+      res.status(404).json({ message: error.message });
+    } else {
+      res.status(500).json({ message: error.message });
+    }
   }
 };
 
 ordersController.getOrders = async (req, res) => {
   try {
     const orders = await Orders.findAll();
+
+    if (!orders) {
+      return res.status(404).json({ message: "Orders not found" });
+    }
 
     res.status(200).json(orders);
   } catch (error) {

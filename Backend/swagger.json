@@ -380,23 +380,434 @@
               }
             }
           }
+        }
+      },
+      "responses": {
+        "201": {
+          "description": "Product created successfully.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ResponseCreateProduct"
+              }
+            }
+          }
         },
+        "400": {
+          "description": "Insuficient data, category or product already exists."
+        },
+        "404": {
+          "description": "Category not found."
+        },
+        "500": {
+          "description": "Internal server error."
+        }
+      }
+    },
+    "/all-products": {
+      "get": {
+        "tags": ["Products"],
+        "description": "Get all products.",
         "responses": {
-          "201": {
-            "description": "Product created successfully.",
+          "200": {
+            "description": "Get all products.",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ResponseCreateProduct"
+                  "$ref": "#/components/schemas/ResponseGetAllProducts"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error."
+          }
+        }
+      }
+    },
+    "/product/{id}": {
+      "get": {
+        "tags": ["Products"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "The id of the product.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "description": "Get a product.",
+        "responses": {
+          "200": {
+            "description": "Get a product.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseGetOneProduct"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Product not found."
+          },
+          "500": {
+            "description": "Internal server error."
+          }
+        }
+      }
+    },
+    "/products/category/{categoryId}": {
+      "get": {
+        "tags": ["Products"],
+        "parameters": [
+          {
+            "name": "categoryId",
+            "in": "path",
+            "required": true,
+            "description": "The id of the category.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "description": "Get all products by category.",
+        "responses": {
+          "200": {
+            "description": "Get all products by category.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseProductsByCategory"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Category not found or products not found."
+          },
+          "500": {
+            "description": "Internal server error."
+          }
+        }
+      }
+    },
+    "/update-product/{id}": {
+      "put": {
+        "tags": ["Products"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "The id of the product.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "description": "Update a product.",
+        "requestBody": {
+          "description": "Necessary data to update a product.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RequestUpdateProduct"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Product updated successfully.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseUpdateProduct"
                 }
               }
             }
           },
           "400": {
-            "description": "Insuficient data, category or product already exists."
+            "description": "At least one field must be provided."
           },
           "404": {
-            "description": "Category not found."
+            "description": "Product not found."
+          },
+          "500": {
+            "description": "Internal server error."
+          }
+        }
+      }
+    },
+    "/delete-product/{id}": {
+      "delete": {
+        "tags": ["Products"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "The id of the product.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "description": "Delete a product.",
+        "responses": {
+          "200": {
+            "description": "Product deleted successfully.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseDeleteProduct"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Product not found."
+          },
+          "500": {
+            "description": "Internal server error."
+          }
+        }
+      }
+    },
+    "/orders": {
+      "post": {
+        "tags": ["Orders"],
+        "description": "Create a new order.",
+        "requestBody": {
+          "description": "Necessary data to create a new order.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RequestCreateOrder"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Order created successfully.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseCreateOrder"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "All fields are required.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "description": "Message error.",
+                      "example": "All fields are required."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "User not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "description": "Message error.",
+                      "example": "User not found."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "description": "Message error.",
+                      "example": "Internal server error."
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/all-orders": {
+      "get": {
+        "tags": ["Orders"],
+        "description": "Get all orders.",
+        "responses": {
+          "200": {
+            "description": "Get all orders.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseGetAllOrders"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Orders not found."
+          },
+          "500": {
+            "description": "Internal server error."
+          }
+        }
+      }
+    },
+    "/orders/{id}": {
+      "get": {
+        "tags": ["Orders"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "The id of the order.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "description": "Get a order.",
+        "responses": {
+          "200": {
+            "description": "Get a order.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseGetOrderById"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Order not found."
+          },
+          "500": {
+            "description": "Internal server error."
+          }
+        }
+      }
+    },
+    "/orders/orders-items/{id}": {
+      "get": {
+        "tags": ["Orders"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "The id of the order.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "description": "Get all order items.",
+        "responses": {
+          "200": {
+            "description": "Get all order items.",
+
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseGetOrdersItemsByOrderId"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Order not found."
+          },
+          "500": {
+            "description": "Internal server error."
+          }
+        }
+      }
+    },
+    "/update-orders/{id}": {
+      "put": {
+        "tags": ["Orders"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "The id of the order.",
+
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "description": "Update a order.",
+        "requestBody": {
+          "description": "Necessary data to update a order.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RequestUpdateOrder"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Order updated successfully.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseUpdateOrder"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "description": "Message error.",
+                      "example": "Invalid request."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Order not found."
           },
           "500": {
             "description": "Internal server error."
@@ -405,6 +816,7 @@
       }
     }
   },
+
   "components": {
     "schemas": {
       "RequestRegister": {
@@ -648,6 +1060,372 @@
             "type": "string",
             "description": "Create product message.",
             "example": "Product created successfully."
+          }
+        }
+      },
+      "ResponseGetAllProducts": {
+        "type": "object",
+        "properties": {
+          "products": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ResponseProduct"
+            },
+            "example": [
+              {
+                "id": 1,
+                "name": "Notebook",
+                "description": "Notebook gamer",
+                "unit_price": 2000,
+                "stock": 10,
+                "category_id": 11
+              }
+            ]
+          }
+        }
+      },
+      "ResponseGetOneProduct": {
+        "type": "object",
+        "properties": {
+          "product": {
+            "$ref": "#/components/schemas/ResponseProduct"
+          }
+        },
+        "example": {
+          "id": 1,
+          "name": "Notebook",
+          "description": "Notebook gamer",
+          "unit_price": 2000,
+          "stock": 10,
+          "categoryId": 11
+        }
+      },
+      "ResponseProductsByCategory": {
+        "type": "object",
+        "properties": {
+          "products": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ResponseProductsByCategory"
+            },
+            "example": [
+              {
+                "id": 1,
+                "name": "Notebook",
+                "description": "Notebook gamer",
+                "unit_price": 2000,
+                "stock": 10,
+                "category_id": 11
+              }
+            ]
+          }
+        }
+      },
+      "RequestUpdateProduct": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Product name.",
+            "example": "Notebook"
+          },
+          "description": {
+            "type": "string",
+            "description": "Product description.",
+            "example": "Notebook gamer"
+          },
+          "unit_price": {
+            "type": "number",
+            "description": "Product unit price.",
+            "example": 2000
+          },
+          "stock": {
+            "type": "number",
+            "description": "Product stock.",
+            "example": 10
+          },
+          "categoryId": {
+            "type": "number",
+            "description": "Product category id.",
+            "example": 11
+          }
+        }
+      },
+      "ResponseUpdateProduct": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "description": "Update product message.",
+            "example": "Product updated successfully."
+          }
+        }
+      },
+      "ResponseDeleteProduct": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "description": "Delete product message.",
+            "example": "Product deleted successfully."
+          }
+        }
+      },
+      "RequestCreateOrder": {
+        "type": "object",
+        "properties": {
+          "userId": {
+            "type": "string",
+            "format": "uuid",
+            "description": " The UUID of the user.",
+            "example": "7605ef5d-b887-4210-a186-6fd89db12b7a"
+          },
+          "status": {
+            "type": "string",
+            "description": "Order status.",
+            "example": "pending"
+          },
+          "payment_method": {
+            "type": "string",
+            "description": "Order payment method.",
+            "example": "Credit Card"
+          },
+          "items": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "orderId": {
+                  "type": "number",
+                  "description": "Order id.",
+                  "example": 17
+                },
+                "productId": {
+                  "type": "number",
+                  "description": "Product id.",
+                  "example": 5
+                },
+                "productName": {
+                  "type": "string",
+                  "description": "Product name.",
+                  "example": "Amarula"
+                },
+                "quantity": {
+                  "type": "number",
+                  "description": "Product quantity.",
+                  "example": 3
+                }
+              }
+            }
+          }
+        }
+      },
+      "ResponseCreateOrder": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "description": "Create order message.",
+            "example": "Order created successfully."
+          },
+          "order": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "number",
+                "description": "Order id.",
+                "example": 17
+              },
+              "userId": {
+                "type": "string",
+                "format": "uuid",
+                "description": " The UUID of the user.",
+                "example": "7605ef5d-b887-4210-a186-6fd89db12b7a"
+              },
+              "status": {
+                "type": "string",
+                "description": "Order status.",
+                "example": "pending"
+              },
+              "payment_method": {
+                "type": "string",
+                "description": "Order payment method.",
+                "example": "Credit Card"
+              }
+            }
+          },
+          "items": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "orderId": {
+                  "type": "number",
+                  "description": "Order id.",
+                  "example": 33
+                },
+                "productId": {
+                  "type": "number",
+                  "description": "Product id.",
+                  "example": 5
+                },
+                "productName": {
+                  "type": "string",
+                  "description": "Product name.",
+                  "example": "Amarula"
+                },
+                "quantity": {
+                  "type": "number",
+                  "description": "Product quantity.",
+                  "example": 3
+                }
+              }
+            }
+          }
+        }
+      },
+      "ResponseGetAllOrders": {
+        "type": "object",
+        "properties": {
+          "orders": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ResponseGetAllOrders"
+            },
+            "example": [
+              {
+                "id": 17,
+                "userId": "7605ef5d-b887-4210-a186-6fd89db12b7a",
+                "status": "pending",
+                "payment_method": "Credit Card",
+                "order_total_price": 3000
+              }
+            ]
+          }
+        }
+      },
+      "ResponseGetOrderById": {
+        "type": "object",
+        "properties": {
+          "order": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "number",
+                "description": "Order id.",
+                "example": 17
+              },
+              "userId": {
+                "type": "string",
+                "format": "uuid",
+                "description": " The UUID of the user.",
+                "example": "7605ef5d-b887-4210-a186-6fd89db12b7a"
+              },
+              "status": {
+                "type": "string",
+                "description": "Order status.",
+                "example": "pending"
+              },
+              "payment_method": {
+                "type": "string",
+                "description": "Order payment method.",
+                "example": "Credit Card"
+              },
+              "order_total_price": {
+                "type": "number",
+                "description": "Order total price.",
+                "example": 3000
+              }
+            }
+          }
+        }
+      },
+      "ResponseGetOrdersItemsByOrderId": {
+        "type": "object",
+        "properties": {
+          "order": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "number",
+                "description": "Order id.",
+                "example": 17
+              },
+              "userId": {
+                "type": "string",
+                "format": "uuid",
+                "description": " The UUID of the user.",
+                "example": "7605ef5d-b887-4210-a186-6fd89db12b7a"
+              },
+              "status": {
+                "type": "string",
+                "description": "Order status.",
+                "example": "pending"
+              },
+              "payment_method": {
+                "type": "string",
+                "description": "Order payment method.",
+                "example": "Credit Card"
+              },
+              "order_total_price": {
+                "type": "number",
+                "description": "Order total price.",
+                "example": 3000
+              }
+            }
+          },
+          "ordersItems": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "number",
+                  "description": "Order id.",
+                  "example": 17
+                },
+                "orderId": {
+                  "type": "number",
+                  "description": "Order id.",
+                  "example": 17
+                },
+                "productId": {
+                  "type": "number",
+                  "description": "Product id.",
+                  "example": 5
+                },
+                "productName": {
+                  "type": "string",
+                  "description": "Product name.",
+                  "example": "Amarula"
+                },
+                "quantity": {
+                  "type": "number",
+                  "description": "Product quantity.",
+                  "example": 3
+                }
+              }
+            }
+          }
+        }
+      },
+      "RequestUpdateOrder": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "description": "Order status.",
+            "example": "canceled"
+          }
+        }
+      },
+      "ResponseUpdateOrder": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "description": "Update order message.",
+            "example": "Order updated successfully"
           }
         }
       }

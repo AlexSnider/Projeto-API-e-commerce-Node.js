@@ -47,8 +47,8 @@ app.post("/logout", userController);
 // PRODUCT ROUTES
 app.post("/products", productsController);
 app.get("/all-products", productsController);
-app.get("/products/:id", productsController);
-app.get("/products/category/:category-id", productsController);
+app.get("/product/:id", productsController);
+app.get("/products/category/:categoryId", productsController);
 app.put("/update-product/:id", productsController);
 app.delete("/delete-product/:id", productsController);
 
@@ -61,7 +61,7 @@ app.delete("/delete-category/:id", categoriesController);
 
 // ORDERS ROUTES
 app.post("/orders", ordersController);
-app.put("/orders/:id", ordersController);
+app.put("/update-orders/:id", ordersController);
 app.get("/all-orders", ordersController);
 app.get("/orders/:id", ordersController);
 app.get("/orders/orders-items/:id", ordersController);
