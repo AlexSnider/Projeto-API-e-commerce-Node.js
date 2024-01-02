@@ -12,8 +12,9 @@ Node.js® is an open-source, cross-platform JavaScript runtime environment.
 
 ## Pré-requisitos:
 
-* Windows;
-* Navegador de Internet
+* Windows 10 ou 11;
+* Navegador de Internet;
+* Microsoft Visiual Studio Code
 
 ## Como começar:
 
