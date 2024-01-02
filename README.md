@@ -10,7 +10,7 @@ A aplicação pode registrar/manejar usuários, ordens e seus itens, produtos e 
 Node.js® is an open-source, cross-platform JavaScript runtime environment.
 
 
-## Pré-requisitos:
+# Pré-requisitos:
 
 * Windows 10 ou 11;
 * Navegador de Internet;
@@ -18,7 +18,7 @@ Node.js® is an open-source, cross-platform JavaScript runtime environment.
 * Node.js, link: https://nodejs.org/dist/v20.10.0/node-v20.10.0-x64.msi
 * XAMPP, link: https://www.apachefriends.org/pt_br/download.html
 
-## Como começar:
+# Como começar:
 
 Clone o repositório:
 
