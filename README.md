@@ -44,7 +44,7 @@ npm i
 ```
 para instalar as dependências,
 
-Abra e de start em `Apache` e `MySQL` no XAMPP.
+Abra e de start em `Apache` e `MySQL` no XAMPP e crie uma base de dados para a aplicação.
 
 Execute as migrações com o comando:
 
