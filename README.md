@@ -14,7 +14,8 @@ Node.js® is an open-source, cross-platform JavaScript runtime environment.
 
 * Windows 10 ou 11;
 * Navegador de Internet;
-* Microsoft Visiual Studio Code
+* Microsoft Visiual Studio Code, link: https://code.visualstudio.com/download
+* Node.js, link: https://nodejs.org/dist/v20.10.0/node-v20.10.0-x64.msi
 
 ## Como começar:
 
