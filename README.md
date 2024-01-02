@@ -18,6 +18,15 @@ Node.js® is an open-source, cross-platform JavaScript runtime environment.
 * Node.js, link: https://nodejs.org/dist/v20.10.0/node-v20.10.0-x64.msi
 * XAMPP, link: https://www.apachefriends.org/pt_br/download.html
 
+# Tecnologias empregadas
+
+* Sequelize
+* Json Web Tokens
+* Express
+* Nodemailer
+* Swagger - documentação
+* UUID - gerador de ID's únicos aos usuários
+
 # Como começar
 
 Clone o repositório:
