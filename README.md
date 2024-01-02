@@ -38,7 +38,7 @@ Edite o arquivo:
 
 e
 
- config `.config.json` (adicione o nome da sua base de dados)
+ config/ `.config.json` (adicione o nome da sua base de dados)
 
 e insira os dados requeridos,
 
