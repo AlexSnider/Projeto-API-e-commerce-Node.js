@@ -21,5 +21,11 @@ Clone o repositório:
 
 `https://github.com/AlexSnider/Projeto-API-e-commerce-Node.js/tree/main/Backend`
 
-Execute `cd backend` em caso da aplicação não estiver setada nessa pasta.
+Execute `cd backend` em caso da aplicação não estiver setada nessa pasta,
+
+Edite o arquivo `.ENV` e insira os dados requeridos,
+
+Execute as migrações com o comando `npx sequelize-cli db:migrate`,
+
+Execute a aplicação com `npm start`.
 
