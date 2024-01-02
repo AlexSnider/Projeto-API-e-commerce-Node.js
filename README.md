@@ -59,3 +59,12 @@ npm start
 
 Abra seu navegador e navegue até https://localhost:3002/api-docs.
 
+# Uso:
+
+A API fornece endpoins para o manejo de uma mini loja e-commerce com diversos produtos.
+
+Após o start da aplicação, o link fornecido com o caminho API DOCS, contém todos esses endpoints e suas funcionalidades descritas.
+
+Imagem ilustrativa da documentação:
+
+![image](https://github.com/AlexSnider/Projeto-API-e-commerce-Node.js/assets/103783575/870e5c4a-eed3-4c27-8539-760ee87add04)
