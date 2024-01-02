@@ -30,9 +30,9 @@ cd backend
 em caso da aplicação não estiver setada nessa pasta,
 
 Edite o arquivo 
-```
-.ENV
-```
+
+`.ENV`
+
 e insira os dados requeridos,
 
 Execute o comando 
