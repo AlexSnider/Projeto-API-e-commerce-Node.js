@@ -199,7 +199,7 @@ ordersController.getOrdersItensByOrderId = async (req, res) => {
         userId: order.userId,
         status: order.status,
         payment_method: order.payment_method,
-        order_total_price: order.order_total_price,
+        order_total_price: order.order_total_price,  //REFATORAR COM INCLUDE
       },
       ordersItems: ordersItems.map((item) => ({
         id: item.id,
