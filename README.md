@@ -33,7 +33,7 @@ em caso da aplicação não estiver setada nessa pasta,
 
 Edite o arquivo:
 
-`.ENV`
+`.ENV.EXAMPLE`
 
 e insira os dados requeridos,
 
