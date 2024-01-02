@@ -71,7 +71,7 @@ Imagem ilustrativa da documentação:
 
 Você pode interagir com a API através da documentação ou usar programas como Postman ou Insomnia.
 
-#Funcionalidades extras:
+# Funcionalidades extras:
 
 A API apresenta a capacidade de envio de e-mails a cada ordem registrada diretamente para o usuário que efetuou a ordem.
 
