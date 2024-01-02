@@ -68,3 +68,5 @@ Após o start da aplicação, o link fornecido com o caminho API DOCS, contém t
 Imagem ilustrativa da documentação:
 
 ![image](https://github.com/AlexSnider/Projeto-API-e-commerce-Node.js/assets/103783575/870e5c4a-eed3-4c27-8539-760ee87add04)
+
+Você pode interagir com a API através da documentação ou usar programas como Postman ou Insomnia.
