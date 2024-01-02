@@ -70,3 +70,18 @@ Imagem ilustrativa da documentação:
 ![image](https://github.com/AlexSnider/Projeto-API-e-commerce-Node.js/assets/103783575/870e5c4a-eed3-4c27-8539-760ee87add04)
 
 Você pode interagir com a API através da documentação ou usar programas como Postman ou Insomnia.
+
+#Funcionalidades extras:
+
+A API apresenta a capacidade de envio de e-mails a cada ordem registrada diretamente para o usuário que efetuou a ordem.
+
+Imagem de exemplo:
+
+![image](https://github.com/AlexSnider/Projeto-API-e-commerce-Node.js/assets/103783575/2100ee2a-161b-4053-8882-283fc083eaf9)
+
+Se o usuário decidir trocar a sua senha, um e-mail é enviado para que seja feita a troca com uma chave única de acesso.
+
+Exemplo:
+
+![image](https://github.com/AlexSnider/Projeto-API-e-commerce-Node.js/assets/103783575/51a5d6f1-ad94-4df3-962d-33b010d62be7)
+
