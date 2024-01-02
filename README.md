@@ -25,7 +25,11 @@ Execute `cd backend` em caso da aplicação não estiver setada nessa pasta,
 
 Edite o arquivo `.ENV` e insira os dados requeridos,
 
+Execute o comando `npm i` para instalar as dependências,
+
 Execute as migrações com o comando `npx sequelize-cli db:migrate`,
 
-Execute a aplicação com `npm start`.
+Execute a aplicação com `npm start`,
+
+Abra seu navegador e navegue até https://localhost:3002/api-docs.
 
