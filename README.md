@@ -36,6 +36,10 @@ Edite o arquivo:
 
 `.ENV.EXAMPLE`
 
+e
+
+`.config` (adicione o nome da sua base de dados)
+
 e insira os dados requeridos,
 
 Execute o comando:
