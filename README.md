@@ -34,7 +34,7 @@ em caso da aplicação não estiver setada nessa pasta,
 
 Edite o arquivo:
 
-`.ENV.EXAMPLE` e config/ `.config.json` (adicione o nome da sua base de dados)
+`.ENV.EXAMPLE` e config/ `.config.json`
 
 e insira os dados requeridos,
 
