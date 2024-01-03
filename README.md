@@ -36,12 +36,6 @@ Clone o repositório:
 https://github.com/AlexSnider/Projeto-API-e-commerce-Node.js/tree/main
 ```
 
-Execute:
-```
-cd backend
-```
-em caso da aplicação não estiver setada nessa pasta,
-
 Edite o arquivo:
 
 `.ENV.EXAMPLE` e config/ `.config.json`
