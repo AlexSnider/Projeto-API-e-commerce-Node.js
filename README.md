@@ -44,9 +44,9 @@ e insira os dados requeridos,
 
 Execute o comando:
 ```
-npm i
+npm install
 ```
-para instalar as dependências,
+para instalar as dependências necessárias para rodar a aplicação,
 
 Abra e de start em `Apache` e `MySQL` no XAMPP e crie uma base de dados para a aplicação.
 
