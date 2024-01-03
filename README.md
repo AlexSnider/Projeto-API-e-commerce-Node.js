@@ -97,4 +97,4 @@ Sigo em constante aprendizado e buscando novas tecnologias como uma forma de ama
 
 # Licença
 
-Esse projeto está sob licença MIT. Detalhes: [MIT Licence](https://github.com/AlexSnider/Projeto-API-e-commerce-Node.js/blob/main/LICENCE)
+Esse projeto está sob licença MIT. Detalhes: [MIT Licence](https://github.com/AlexSnider/Projeto-API-e-commerce-Node.js/blob/main/LICENCE).
