@@ -3,11 +3,12 @@
 O projeto foi desenvolvido para aplicação de conhecimentos adiquiridos durante a faculdade e estudos pessoais. <br/>
 
 Essa aplicação é uma das partes do projeto mini e-commerce que estou projetando. Em especifíco, o back-end. <br/>
-A aplicação pode registrar/manejar usuários, ordens e seus itens, produtos e categorias.
+
+A aplicação pode `registrar/manejar usuários`, `ordens` e seus `itens`, `produtos` e `categorias`.
 
 ![node-js-736399_1920](https://github.com/AlexSnider/Projeto-API-e-commerce-Node.js/assets/103783575/18da5724-9985-4320-ae21-800a2ebfb092)
 
-Node.js® is an open-source, cross-platform JavaScript runtime environment.
+<p align="center">Node.js® is an open-source, cross-platform JavaScript runtime environment.<p/>
 
 
 # Pré-requisitos
@@ -32,14 +33,8 @@ Node.js® is an open-source, cross-platform JavaScript runtime environment.
 Clone o repositório:
 
 ```
-https://github.com/AlexSnider/Projeto-API-e-commerce-Node.js/tree/main/Backend
+https://github.com/AlexSnider/Projeto-API-e-commerce-Node.js/tree/main
 ```
-
-Execute:
-```
-cd backend
-```
-em caso da aplicação não estiver setada nessa pasta,
 
 Edite o arquivo:
 
@@ -49,9 +44,9 @@ e insira os dados requeridos,
 
 Execute o comando:
 ```
-npm i
+npm install
 ```
-para instalar as dependências,
+para instalar as dependências necessárias para rodar a aplicação,
 
 Abra e de start em `Apache` e `MySQL` no XAMPP e crie uma base de dados para a aplicação.
 
@@ -96,7 +91,7 @@ Me propus a construir uma API com as tecnologias listadas e o resultado está se
 A estrutura é simples, são pequenos gerenciamentos de uma mini loja, mas a ideia principal foi entregar algo de uso prático e estruturado.
 Houveram complicações em como manejar ordens e itens de maneira simultânea, mas consegui lidar com o desafio.
 
-A próxima ideia é criar um fronend para essa API e fechar essa primeira aventura solo.
+A próxima ideia é criar um frontend para essa API e fechar essa primeira aventura solo.
 
-Sigo em constante aprendizado e buscando novas tecnologias como uma forma de amadurecer meu conhecimentos.
+Sigo em constante aprendizado e buscando novas tecnologias como uma forma de amadurecer meus conhecimentos.
 
