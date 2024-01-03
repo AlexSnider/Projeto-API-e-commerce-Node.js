@@ -74,10 +74,6 @@ A API fornece endpoins para o manejo de uma mini loja e-commerce com diversos pr
 
 Após o start da aplicação, o link fornecido com o caminho API DOCS, contém todos esses endpoints e suas funcionalidades descritas.
 
-Imagem ilustrativa da documentação:
-
-![image](https://github.com/AlexSnider/Projeto-API-e-commerce-Node.js/assets/103783575/870e5c4a-eed3-4c27-8539-760ee87add04)
-
 Você pode interagir com a API através da documentação ou usar programas como Postman ou Insomnia.
 
 # Funcionalidades Extras
@@ -93,4 +89,14 @@ Se o usuário decidir trocar a sua senha, um e-mail é enviado para que seja fei
 Exemplo:
 
 ![image](https://github.com/AlexSnider/Projeto-API-e-commerce-Node.js/assets/103783575/51a5d6f1-ad94-4df3-962d-33b010d62be7)
+
+# Durante o desenvolvimento
+
+Me propus a construir uma API com as tecnologias listadas e o resultado está sendo esse.
+A estrutura é simples, são pequenos gerenciamentos de uma mini loja, mas a ideia principal foi entregar algo de uso prático e estruturado.
+Houveram complicações em como manejar ordens e itens de maneira simultânea, mas consegui lidar com o desafio.
+
+A próxima ideia é criar um fronend para essa API e fechar essa primeira aventura solo.
+
+Sigo em constante aprendizado e buscando novas tecnologias como uma forma de amadurecer meu conhecimentos.
 
