@@ -98,5 +98,5 @@ Houveram complicações em como manejar ordens e itens de maneira simultânea, m
 
 A próxima ideia é criar um fronend para essa API e fechar essa primeira aventura solo.
 
-Sigo em constante aprendizado e buscando novas tecnologias como uma forma de amadurecer meu conhecimentos.
+Sigo em constante aprendizado e buscando novas tecnologias como uma forma de amadurecer meus conhecimentos.
 
