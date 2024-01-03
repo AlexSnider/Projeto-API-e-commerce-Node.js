@@ -38,7 +38,7 @@ https://github.com/AlexSnider/Projeto-API-e-commerce-Node.js/tree/main
 
 Edite o arquivo:
 
-`.ENV.EXAMPLE` e config/ `.config.json`
+`.env.example` e config/ `.config.json`
 
 e insira os dados requeridos,
 
