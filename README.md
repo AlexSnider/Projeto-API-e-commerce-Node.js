@@ -32,7 +32,7 @@ A aplicação pode registrar/manejar usuários, ordens e seus itens, produtos e 
 Clone o repositório:
 
 ```
-https://github.com/AlexSnider/Projeto-API-e-commerce-Node.js/tree/main/Backend
+https://github.com/AlexSnider/Projeto-API-e-commerce-Node.js/tree/main
 ```
 
 Execute:
