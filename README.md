@@ -38,7 +38,7 @@ https://github.com/AlexSnider/Projeto-API-e-commerce-Node.js/tree/main
 
 Edite o arquivo:
 
-`.ENV.EXAMPLE` e config/ `.config.json`
+`.env.example` e config/ `.config.json`
 
 e insira os dados requeridos,
 
@@ -95,3 +95,6 @@ A próxima ideia é criar um frontend para essa API e fechar essa primeira avent
 
 Sigo em constante aprendizado e buscando novas tecnologias como uma forma de amadurecer meus conhecimentos.
 
+# Licença
+
+Esse projeto está sob licença MIT. Detalhes: [MIT Licence](https://github.com/AlexSnider/Projeto-API-e-commerce-Node.js/blob/main/LICENCE).
