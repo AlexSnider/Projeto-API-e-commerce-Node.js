@@ -29,7 +29,7 @@ const OrdersItens = sequelize.define("OrdersItens", {
     references: {
       model: "Products",
       key: "name",
-    }
+    },
   },
   quantity: {
     type: DataTypes.INTEGER,

@@ -1,5 +1,6 @@
 const { DataTypes } = require("sequelize");
 const User = require("./User.js");
+const OrdersItens = require("./OrdersItens.js");
 
 module.exports = (sequelize) => {
   const Orders = sequelize.define("Orders", {
@@ -35,6 +36,11 @@ module.exports = (sequelize) => {
       type: DataTypes.DATE,
       defaultValue: DataTypes.NOW,
     },
+  });
+
+  Orders.hasMany(OrdersItens, {
+    foreignKey: "orderId",
+    as: "OrdersItens",
   });
 
   return Orders;
