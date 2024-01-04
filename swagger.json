@@ -36,7 +36,21 @@
             }
           },
           "400": {
-            "description": "Insuficient data or user already exists."
+            "description": "All fields are required.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "description": "Message error.",
+                      "example": "All fields are required."
+                    }
+                  }
+                }
+              }
+            }
           },
           "500": {
             "description": "Internal server error."
@@ -70,13 +84,55 @@
             }
           },
           "400": {
-            "description": "All fields are required."
+            "description": "All fields are required.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "description": "Message error.",
+                      "example": "All fields are required."
+                    }
+                  }
+                }
+              }
+            }
           },
           "401": {
-            "description": "Invalid credentials ."
+            "description": "Ivalid Credentials.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "description": "Message error.",
+                      "example": "Ivalid Credentials."
+                    }
+                  }
+                }
+              }
+            }
           },
           "404": {
-            "description": "User not found."
+            "description": "User not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "description": "Message error.",
+                      "example": "User not found."
+                    }
+                  }
+                }
+              }
+            }
           },
           "500": {
             "description": "Internal server error."
@@ -101,6 +157,9 @@
           },
           "404": {
             "description": "No token was provided."
+          },
+          "500": {
+            "description": "Internal server error."
           }
         }
       }
@@ -179,10 +238,38 @@
             }
           },
           "400": {
-            "description": "Token not provided."
+            "description": "New password is required.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "description": "Message error.",
+                      "example": "New password is required."
+                    }
+                  }
+                }
+              }
+            }
           },
           "404": {
-            "description": "Email or username not found."
+            "description": "No token was provided.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "description": "Message error.",
+                      "example": "No token was provided."
+                    }
+                  }
+                }
+              }
+            }
           },
           "500": {
             "description": "Internal server error."
@@ -216,7 +303,21 @@
             }
           },
           "400": {
-            "description": "Insuficient data or category already exists."
+            "description": "All fields are required.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "description": "Message error.",
+                      "example": "All fields are required."
+                    }
+                  }
+                }
+              }
+            }
           },
           "500": {
             "description": "Internal server error."
@@ -380,27 +481,41 @@
               }
             }
           }
-        }
-      },
-      "responses": {
-        "201": {
-          "description": "Product created successfully.",
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/ResponseCreateProduct"
+        },
+        "responses": {
+          "201": {
+            "description": "Product created successfully.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseCreateProduct"
+                }
               }
             }
+          },
+          "400": {
+            "description": "All fields are required.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "description": "Message error.",
+                      "example": "All fields are required."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Category not found."
+          },
+          "500": {
+            "description": "Internal server error."
           }
-        },
-        "400": {
-          "description": "Insuficient data, category or product already exists."
-        },
-        "404": {
-          "description": "Category not found."
-        },
-        "500": {
-          "description": "Internal server error."
         }
       }
     },
@@ -487,7 +602,21 @@
             }
           },
           "404": {
-            "description": "Category not found or products not found."
+            "description": "Category not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "description": "Message error.",
+                      "example": "Category not found."
+                    }
+                  }
+                }
+              }
+            }
           },
           "500": {
             "description": "Internal server error."
@@ -1069,7 +1198,7 @@
           "products": {
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/ResponseProduct"
+              "$ref": "#/components/schemas/ResponseGetAllProducts"
             },
             "example": [
               {
@@ -1088,7 +1217,7 @@
         "type": "object",
         "properties": {
           "product": {
-            "$ref": "#/components/schemas/ResponseProduct"
+            "$ref": "#/components/schemas/ResponseGetOneProduct"
           }
         },
         "example": {

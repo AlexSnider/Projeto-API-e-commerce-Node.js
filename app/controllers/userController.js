@@ -37,7 +37,13 @@ userController.createUser = async (req, res) => {
     res.status(201).json({ message: "User created successfully" });
   } catch (error) {
     console.log(error);
-    res.status(500).json({ message: error.message });
+    if (error instanceof CustomValidationException) {
+      res.status(400).json({ message: error.message });
+    } else if (error instanceof NotFoundException) {
+      res.status(404).json({ message: error.message });
+    } else {
+      res.status(500).json({ message: error.message });
+    }
   }
 };
 
@@ -112,7 +118,13 @@ userController.resetPassword = async (req, res) => {
         .json({ message: "New password must be different from the current password!" });
     }
   } catch (error) {
-    res.status(500).json({ message: "Internal server error", error: error.message });
+    if (error instanceof CustomValidationException) {
+      res.status(400).json({ message: error.message });
+    } else if (error instanceof NotFoundException) {
+      res.status(404).json({ message: error.message });
+    } else {
+      res.status(500).json({ message: error.message });
+    }
   }
 };
 
@@ -151,7 +163,13 @@ userController.loginUser = async (req, res) => {
 
     res.status(200).json({ message: "Login successful" });
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    if (error instanceof CustomValidationException) {
+      res.status(400).json({ message: error.message });
+    } else if (error instanceof NotFoundException) {
+      res.status(404).json({ message: error.message });
+    } else {
+      res.status(500).json({ message: error.message });
+    }
   }
 };
 
