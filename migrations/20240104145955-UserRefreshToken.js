@@ -3,41 +3,36 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    return queryInterface.createTable("Orders_Itens", {
+    return queryInterface.createTable("user_refresh_tokens", {
       id: {
         type: Sequelize.INTEGER,
         primaryKey: true,
         autoIncrement: true,
       },
-      orderId: {
-        type: Sequelize.INTEGER,
+      userId: {
+        type: Sequelize.UUID,
         allowNull: false,
         references: {
-          model: "Orders",
+          model: "users",
           key: "id",
         },
       },
-      productId: {
-        type: Sequelize.INTEGER,
-        allowNull: false,
-        references: {
-          model: "Products",
-          key: "id",
-        },
-      },
-      productName: {
+      refreshToken: {
         type: Sequelize.STRING,
         allowNull: false,
-        references: {
-          model: "Products",
-          key: "name",
-        },
-      },
-      quantity: {
-        type: Sequelize.INTEGER,
+        unique: true,
       },
       createdAt: {
         type: Sequelize.DATE,
+      },
+      expirationDate: {
+        type: Sequelize.DATE,
+        allowNull: false,
+      },
+      revoked: {
+        type: Sequelize.BOOLEAN,
+        allowNull: false,
+        defaultValue: false,
       },
       updatedAt: {
         type: Sequelize.DATE,
@@ -46,6 +41,6 @@ module.exports = {
   },
 
   async down(queryInterface, Sequelize) {
-    return queryInterface.dropTable("OrdersItens");
+    return queryInterface.dropTable("user_refresh_tokens");
   },
 };

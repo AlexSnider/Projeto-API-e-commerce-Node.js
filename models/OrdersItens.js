@@ -1,7 +1,7 @@
 const { DataTypes } = require("sequelize");
 const sequelize = require("../db/dbConection.js");
 
-const OrdersItens = sequelize.define("OrdersItens", {
+const OrdersItens = sequelize.define("Orders_Itens", {
   id: {
     type: DataTypes.INTEGER,
     primaryKey: true,

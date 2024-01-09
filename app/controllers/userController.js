@@ -1,7 +1,9 @@
 const User = require("../../models/User");
-const { createToken } = require("../../JWT/JWT");
+const { createToken, createRefreshToken, renewAccessToken } = require("../../JWT/JWT");
 const bcrypt = require("bcrypt");
 const sendEmail = require("../mail/passwordMailer");
+const UserRefreshToken = require("../../models/UserRefreshToken");
+const { parse } = require("dotenv");
 const saltRounds = 10;
 
 const userController = {};
@@ -72,7 +74,9 @@ userController.changePassword = async (req, res) => {
 
     sendEmail(email, username, resetToken);
 
-    res.status(200).json({ message: "Password reset link has been sent to the E-mail registered." });
+    res
+      .status(200)
+      .json({ message: "Password reset link has been sent to the E-mail registered." });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
@@ -136,6 +140,12 @@ userController.loginUser = async (req, res) => {
       return res.status(400).json({ message: "All fields are required" });
     }
 
+    const existingToken = req.cookies["access_token"];
+
+    if (existingToken) {
+      return res.status(401).json({ message: "You are already logged in!" });
+    }
+
     const user = await User.findOne({ where: { username } });
 
     if (!user) {
@@ -145,23 +155,40 @@ userController.loginUser = async (req, res) => {
     const isPasswordValid = await bcrypt.compare(password, user.password);
 
     if (!isPasswordValid) {
-      return res.status(401).json({ message: "Invalid credentials" });
+      return res.status(401).json({ message: "Invalid credentials!" });
     }
 
     const accessToken = createToken(user);
 
-    if (!accessToken) {
-      return res.status(500).json({ message: "Failed to generate token!" });
+    const refreshTokenDuration = 7 * 24 * 60 * 60 * 1000;
+
+    const refreshToken = createRefreshToken(user, refreshTokenDuration);
+
+    if (!refreshToken || !accessToken) {
+      return res.status(500).json({ message: "Failed to generate token" });
     }
+
+    await UserRefreshToken.create({
+      refreshToken,
+      userId: user.id,
+      expirationDate: new Date(Date.now() + refreshTokenDuration),
+    });
+
+    res.cookie("refresh_token", refreshToken, {
+      httpOnly: true,
+      secure: true,
+      sameSite: "none",
+      maxAge: refreshTokenDuration,
+    });
 
     res.cookie("access_token", accessToken, {
       httpOnly: true,
       secure: true,
       sameSite: "none",
-      maxAge: 24 * 60 * 60 * 1000,
+      maxAge: 1000,
     });
 
-    res.status(200).json({ message: "Login successful" });
+    res.status(200).json({ message: "Login successful!", accessToken, refreshToken });
   } catch (error) {
     if (error instanceof CustomValidationException) {
       res.status(400).json({ message: error.message });

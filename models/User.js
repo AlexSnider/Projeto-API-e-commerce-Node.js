@@ -1,6 +1,7 @@
 const { DataTypes } = require("sequelize");
 const sequelize = require("../db/dbConection.js");
 const { v4: uuidv4 } = require("uuid");
+const UserRefreshToken = require("./UserRefreshToken.js");
 
 const User = sequelize.define("User", {
   id: {
@@ -37,5 +38,8 @@ const User = sequelize.define("User", {
     defaultValue: DataTypes.NOW,
   },
 });
+
+User.hasMany(UserRefreshToken, { foreignKey: "userId", sourceKey: "id" });
+UserRefreshToken.belongsTo(User, { foreignKey: "userId", targetKey: "id" });
 
 module.exports = User;
