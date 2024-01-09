@@ -1,8 +1,8 @@
 # Projeto API para mini e-commerce
 
-O projeto foi desenvolvido para aplicação de conhecimentos adiquiridos durante a faculdade e estudos pessoais. <br/>
+O projeto foi desenvolvido para aplicação de conhecimentos adquiridos durante a faculdade e estudos pessoais. <br/>
 
-Essa aplicação é uma das partes do projeto mini e-commerce que estou projetando. Em especifíco, o back-end. <br/>
+Essa aplicação é uma das partes do projeto mini e-commerce que estou projetando. Em específico, o back-end. <br/>
 
 A aplicação pode `registrar/manejar usuários`, `ordens` e seus `itens`, `produtos` e `categorias`.
 
@@ -61,7 +61,7 @@ Execute a aplicação com:
 npm start
 ```
 
-Abra seu navegador e navegue até https://localhost:3002/api-docs.
+Abra seu navegador e navegue até http://localhost:3002/api-docs.
 
 # Uso
 
