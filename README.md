@@ -93,7 +93,7 @@ Houveram complicações em como manejar ordens e itens de maneira simultânea, m
 
 A próxima ideia é criar um frontend para essa API e fechar essa primeira aventura solo.
 
-Sigo em constante aprendizado e buscando novas tecnologias como uma forma de amadurecer meus conhecimentos.
+Sigo em constante aprendizado e buscando novas tecnologias como forma de amadurecer meus conhecimentos.
 
 # Licença
 
