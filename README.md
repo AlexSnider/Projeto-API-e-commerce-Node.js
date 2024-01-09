@@ -61,7 +61,7 @@ Execute a aplicação com:
 npm start
 ```
 
-Abra seu navegador e navegue até https://localhost:3002/api-docs.
+Abra seu navegador e navegue até http://localhost:3002/api-docs.
 
 # Uso
 
