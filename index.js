@@ -31,7 +31,7 @@ const { verifyToken } = require("./JWT/JWT");
 // MIDDLEWARE
 app.use(
   cors({
-    origin: "http://localhost:5173",
+    origin: "http://localhost:3002",
     credentials: true,
     methods: "GET,PUT,POST,DELETE",
   })
@@ -66,7 +66,7 @@ app.get("/all-orders", ordersController);
 app.get("/orders/:id", ordersController);
 app.get("/orders/orders-items/:id", ordersController);
 
-// PAYMENT ROUTES
+// PAYMENT ROUTE - TEST ROUTE
 app.get("/payment", verifyToken, (req, res) => {
   res.send("You've done it!");
 });

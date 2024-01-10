@@ -1,9 +1,8 @@
 const User = require("../../models/User");
-const { createToken, createRefreshToken, renewAccessToken } = require("../../JWT/JWT");
+const { createToken, createRefreshToken } = require("../../JWT/JWT");
 const bcrypt = require("bcrypt");
 const sendEmail = require("../mail/passwordMailer");
 const UserRefreshToken = require("../../models/UserRefreshToken");
-const { parse } = require("dotenv");
 const saltRounds = 10;
 
 const userController = {};
@@ -13,13 +12,13 @@ userController.createUser = async (req, res) => {
     const { username, email, password } = req.body;
 
     if (!username || !email || !password) {
-      return res.status(400).json({ message: "All fields are required" });
+      return res.status(400).json({ message: "All fields are required..." });
     }
 
     const existingUser = await User.findOne({ where: { username } });
 
     if (existingUser) {
-      return res.status(400).json({ message: "User already exists" });
+      return res.status(400).json({ message: "User already exists!" });
     }
 
     const existingEmail = await User.findOne({ where: { email } });
@@ -36,7 +35,7 @@ userController.createUser = async (req, res) => {
       password: hashedPassword,
     });
 
-    res.status(201).json({ message: "User created successfully" });
+    res.status(201).json({ message: "User created successfully!" });
   } catch (error) {
     console.log(error);
     if (error instanceof CustomValidationException) {
@@ -54,14 +53,14 @@ userController.changePassword = async (req, res) => {
     const { email, username } = req.body;
 
     if (!email || !username) {
-      return res.status(400).json({ message: "All fields are required" });
+      return res.status(400).json({ message: "All fields are required..." });
     }
 
     const userMail = await User.findOne({ where: { email } });
     const user = await User.findOne({ where: { username } });
 
     if (!userMail && !user) {
-      return res.status(404).json({ message: "User not found" });
+      return res.status(404).json({ message: "User not found!" });
     }
 
     const userFound = user ? user.username : userMail.username;
@@ -76,7 +75,7 @@ userController.changePassword = async (req, res) => {
 
     res
       .status(200)
-      .json({ message: "Password reset link has been sent to the E-mail registered." });
+      .json({ message: "Password reset link has been sent to the E-mail registered!" });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
@@ -149,7 +148,7 @@ userController.loginUser = async (req, res) => {
     const user = await User.findOne({ where: { username } });
 
     if (!user) {
-      return res.status(404).json({ message: "User not found" });
+      return res.status(404).json({ message: "User not found!" });
     }
 
     const isPasswordValid = await bcrypt.compare(password, user.password);
@@ -165,7 +164,7 @@ userController.loginUser = async (req, res) => {
     const refreshToken = createRefreshToken(user, refreshTokenDuration);
 
     if (!refreshToken || !accessToken) {
-      return res.status(500).json({ message: "Failed to generate token" });
+      return res.status(500).json({ message: "Failed to generate token!" });
     }
 
     await UserRefreshToken.create({
@@ -203,13 +202,16 @@ userController.loginUser = async (req, res) => {
 userController.logoutUser = async (req, res) => {
   try {
     const accessToken = req.cookies["access_token"];
+    const refreshToken = req.cookies["refresh_token"];
 
-    if (!accessToken) {
-      return res.status(404).json({ message: "No token was provided" });
+    if (!accessToken || !refreshToken) {
+      return res.status(404).json({ message: "No token was provided!" });
     }
 
     res.clearCookie("access_token");
-    res.status(200).json({ message: "Logout successful" });
+    res.clearCookie("refresh_token");
+
+    res.status(200).json({ message: "Logout successfully done!" });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }

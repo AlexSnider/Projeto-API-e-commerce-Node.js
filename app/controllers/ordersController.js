@@ -15,7 +15,7 @@ ordersController.createOrder = async (req, res) => {
     const { userId, status, payment_method, items } = req.body;
 
     if (!userId || !status || !payment_method || !items || items.length === 0) {
-      return res.status(400).json({ message: "All fields are required" });
+      return res.status(400).json({ message: "All fields are required..." });
     }
 
     await sequelize.transaction(async (t) => {
@@ -26,13 +26,13 @@ ordersController.createOrder = async (req, res) => {
 
         if (!product) {
           return res.status(404).json({
-            message: `Product with ID ${item.productId} not found`,
+            message: `Product with ID ${item.productId} not found!`,
           });
         }
 
         if (product.stock < item.quantity) {
           return res.status(400).json({
-            message: `Insufficient stock for product with ID ${item.productId}`,
+            message: `Insufficient stock for product with ID ${item.productId}!`,
           });
         }
 
@@ -41,14 +41,14 @@ ordersController.createOrder = async (req, res) => {
 
       if (order_total_price <= 0) {
         return res.status(400).json({
-          message: "Total price must be greater than zero to create an order.",
+          message: "Total price must be greater than zero to create an order!",
         });
       }
 
       const user = await User.findByPk(userId, { transaction: t });
 
       if (!user) {
-        return res.status(404).json({ message: `User with ID ${userId} not found` });
+        return res.status(404).json({ message: `User with ID ${userId} not found!` });
       }
 
       const order = await Orders.create(
@@ -84,7 +84,7 @@ ordersController.createOrder = async (req, res) => {
         sendEmail(user, status, order_total_price, payment_method, items);
 
         return res.status(201).json({
-          message: "Order created successfully",
+          message: "Order created successfully!",
           order,
           order_total_price,
           ordersItems: items,
@@ -110,7 +110,7 @@ ordersController.updateOrder = async (req, res) => {
     const order = await Orders.findOne({ where: { id: orderId }, transaction: t });
 
     if (!order) {
-      return res.status(404).json({ message: "Order not found" });
+      return res.status(404).json({ message: "Order not found!" });
     }
 
     const { status } = req.body;
@@ -119,14 +119,14 @@ ordersController.updateOrder = async (req, res) => {
       await t.rollback();
       return res.status(400).json({
         message:
-          "Status field must be provided for update or status must be different from current status",
+          "Status field must be provided for update or status must be different from current status...",
       });
     }
 
     if (status === "paid" && order.status === "canceled") {
       await t.rollback();
       return res.status(400).json({
-        message: "Order status cannot be updated to paid or pending when canceled",
+        message: "Order status cannot be updated to paid or pending when canceled!",
       });
     }
 
@@ -149,11 +149,11 @@ ordersController.updateOrder = async (req, res) => {
       }
 
       await t.commit();
-      return res.status(200).json({ message: "Order canceled successfully" });
+      return res.status(200).json({ message: "Order canceled successfully!" });
     }
 
     await t.commit();
-    res.status(200).json({ message: "Order status updated successfully" });
+    res.status(200).json({ message: "Order status updated successfully!" });
   } catch (error) {
     await t.rollback();
 
@@ -172,7 +172,7 @@ ordersController.getOrders = async (req, res) => {
     const orders = await Orders.findAll();
 
     if (!orders) {
-      return res.status(404).json({ message: "Orders not found" });
+      return res.status(404).json({ message: "Orders not found!" });
     }
 
     res.status(200).json(orders);
@@ -186,7 +186,7 @@ ordersController.getOrderById = async (req, res) => {
     const order = await Orders.findOne({ where: { id: req.params.id } });
 
     if (!order) {
-      return res.status(404).json({ message: "Order not found" });
+      return res.status(404).json({ message: "Order not found!" });
     }
 
     res.status(200).json(order);
@@ -211,7 +211,7 @@ ordersController.getOrdersItensByOrderId = async (req, res) => {
     });
 
     if (!orderWithItems) {
-      return res.status(404).json({ message: "Order not found" });
+      return res.status(404).json({ message: "Order not found!" });
     }
 
     const combinedData = {
