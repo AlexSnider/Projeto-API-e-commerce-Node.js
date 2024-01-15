@@ -28,6 +28,7 @@
     "uuid": "^9.0.1"
   },
   "devDependencies": {
+    "git-commit-msg-linter": "^5.0.6",
     "sequelize-cli": "^6.6.2"
   }
 }
