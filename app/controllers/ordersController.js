@@ -1,3 +1,8 @@
+const {
+  CustomValidationException,
+  NotFoundException,
+} = require("../controllers/customExceptions/customExceptions");
+
 const sequelize = require("../../db/dbConection.js");
 const createOrdersModel = require("../../models/Orders.js");
 const Orders = createOrdersModel(sequelize);

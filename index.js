@@ -40,8 +40,8 @@ app.use(
 // USER ROUTES
 app.post("/register", userController);
 app.post("/login", userController);
-app.put("/change-password", userController);
-app.post("/reset-password/:token", userController);
+app.put("/reset-password", userController);
+app.post("/change-password/:token", userController);
 app.post("/logout", userController);
 
 // PRODUCT ROUTES

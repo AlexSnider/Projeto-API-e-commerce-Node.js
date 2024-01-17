@@ -1,9 +1,14 @@
+const {
+  CustomValidationException,
+  NotFoundException,
+} = require("../controllers/customExceptions/customExceptions");
+
 const User = require("../../models/User");
 const { createToken, createRefreshToken } = require("../../JWT/JWT");
-const bcrypt = require("bcrypt");
 const sendEmail = require("../mail/passwordMailer");
 const UserRefreshToken = require("../../models/UserRefreshToken");
-const saltRounds = 10;
+const { Op } = require("sequelize");
+const argon2 = require("argon2");
 
 const userController = {};
 
@@ -15,27 +20,38 @@ userController.createUser = async (req, res) => {
       return res.status(400).json({ message: "All fields are required..." });
     }
 
-    const existingUser = await User.findOne({ where: { username } });
-
-    if (existingUser) {
-      return res.status(400).json({ message: "User already exists!" });
-    }
-
-    const existingEmail = await User.findOne({ where: { email } });
-
-    if (existingEmail) {
-      return res.status(400).json({ message: "Email already cadastrated!" });
-    }
-
-    const hashedPassword = await bcrypt.hash(password, saltRounds);
-
-    await User.create({
-      username,
-      email,
-      password: hashedPassword,
+    const existingUser = await User.findOne({
+      where: {
+        [Op.or]: [{ username: username }, { email: email }],
+      },
     });
 
-    res.status(201).json({ message: "User created successfully!" });
+    if (existingUser) {
+      if (existingUser.username === username) {
+        return res.status(400).json({ message: "Username already exists!" });
+      } else if (existingUser.email === email) {
+        return res.status(400).json({ message: "Email already exists!" });
+      }
+    }
+
+    try {
+      const hashedPassword = await argon2.hash(password, {
+        timeCost: 2,
+        memoryCost: 2 ** 12,
+        parallelism: 1,
+      });
+
+      await User.create({
+        username,
+        email,
+        password: hashedPassword,
+      });
+
+      res.status(201).json({ message: "User created successfully!" });
+    } catch (error) {
+      console.log("Error during password hashing: ", error);
+      throw new CustomValidationException("Error during password hashing");
+    }
   } catch (error) {
     console.log(error);
     if (error instanceof CustomValidationException) {
@@ -48,7 +64,7 @@ userController.createUser = async (req, res) => {
   }
 };
 
-userController.changePassword = async (req, res) => {
+userController.resetPassword = async (req, res) => {
   try {
     const { email, username } = req.body;
 
@@ -56,19 +72,22 @@ userController.changePassword = async (req, res) => {
       return res.status(400).json({ message: "All fields are required..." });
     }
 
-    const userMail = await User.findOne({ where: { email } });
-    const user = await User.findOne({ where: { username } });
+    const userData = await User.findOne({
+      where: {
+        [Op.or]: [{ username: username }, { email: email }],
+      },
+    });
 
-    if (!userMail && !user) {
+    if (!userData) {
       return res.status(404).json({ message: "User not found!" });
     }
 
-    const userFound = user ? user.username : userMail.username;
+    const userFound = userData ? userData.username : userData.email;
 
     const resetToken = createToken(userFound);
 
-    if (userMail) {
-      await userMail.set("resetPasswordToken", resetToken).save();
+    if (userData) {
+      await userData.set("resetPasswordToken", resetToken).save();
     }
 
     sendEmail(email, username, resetToken);
@@ -81,7 +100,7 @@ userController.changePassword = async (req, res) => {
   }
 };
 
-userController.resetPassword = async (req, res) => {
+userController.changePasswordConfirmation = async (req, res) => {
   try {
     const { token } = req.params;
 
@@ -89,13 +108,23 @@ userController.resetPassword = async (req, res) => {
       return res.status(400).json({ message: "Token is required!" });
     }
 
-    const { password } = req.body;
+    const { password, confirmPassword } = req.body;
 
-    if (!password) {
-      return res.status(400).json({ message: "The new password is required!" });
+    if (!password || !confirmPassword) {
+      return res
+        .status(400)
+        .json({ message: "The new password and it's confirmation is required!" });
     }
 
-    const hashedPassword = await bcrypt.hash(password, saltRounds);
+    if (password !== confirmPassword) {
+      return res.status(400).json({ message: "Passwords do not match. Try again!" });
+    }
+
+    const hashedPassword = await argon2.hash(String(password), {
+      timeCost: 2,
+      memoryCost: 2 ** 12,
+      parallelism: 1,
+    });
 
     const user = await User.findOne({ where: { resetPasswordToken: token } });
 
@@ -103,23 +132,24 @@ userController.resetPassword = async (req, res) => {
       return res.status(404).json({ message: "User not found or invalid token!" });
     }
 
-    const ifDifferent = await bcrypt.compare(password, user.password);
-    if (!ifDifferent) {
-      const [, updatedRows] = await User.update(
-        { password: hashedPassword, resetPasswordToken: null },
-        { where: { resetPasswordToken: token } }
-      );
+    const isDifferent = !(await argon2.verify(user.password, String(password)));
 
-      if (updatedRows === 0) {
-        return res.status(404).json({ message: "Password not updated!" });
-      }
-
-      res.status(200).json({ message: "Password updated successfully!" });
-    } else {
+    if (!isDifferent) {
       return res
         .status(400)
         .json({ message: "New password must be different from the current password!" });
     }
+
+    const [, updatedRows] = await User.update(
+      { password: hashedPassword, resetPasswordToken: null },
+      { where: { resetPasswordToken: token } }
+    );
+
+    if (updatedRows === 0) {
+      return res.status(404).json({ message: "Password not updated!" });
+    }
+
+    res.status(200).json({ message: "Password updated successfully!" });
   } catch (error) {
     if (error instanceof CustomValidationException) {
       res.status(400).json({ message: error.message });
@@ -151,7 +181,7 @@ userController.loginUser = async (req, res) => {
       return res.status(404).json({ message: "User not found!" });
     }
 
-    const isPasswordValid = await bcrypt.compare(password, user.password);
+    const isPasswordValid = await argon2.verify(user.password, password);
 
     if (!isPasswordValid) {
       return res.status(401).json({ message: "Invalid credentials!" });

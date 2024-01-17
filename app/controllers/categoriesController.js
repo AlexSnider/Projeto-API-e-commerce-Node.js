@@ -1,4 +1,8 @@
 const Categories = require("../../models/Categories");
+const {
+  CustomValidationException,
+  NotFoundException,
+} = require("../controllers/customExceptions/customExceptions");
 
 const categoriesController = {};
 
