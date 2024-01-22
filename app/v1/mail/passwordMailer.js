@@ -19,7 +19,7 @@ function sendEmail(email, username, token) {
       <p>We have received a request to reset your password.</p>
       <p>If you did not make this request, please ignore this email.</p>
       <p>To reset your password, please click on the following link:</p>
-      <p><a href="${process.env.FRONTEND_URL}/change-password/${token}">Change Password</a></p>
+      <p><a href="${process.env.FRONTEND_URL}/v1/change-password/${token}">Change Password</a></p>
       <h1>Thank you for using our service.</h1>
       `,
   };

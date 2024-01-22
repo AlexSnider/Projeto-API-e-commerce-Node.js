@@ -13,10 +13,7 @@ const bodyParser = require("body-parser");
 const swaggerUI = require("swagger-ui-express");
 
 // ROUTES CONTROLLERS
-const userController = require("./app/routes/userRoute");
-const productsController = require("./app/routes/productsRoute");
-const categoriesController = require("./app/routes/categoriesRoute");
-const ordersController = require("./app/routes/ordersRoute");
+const v1Routes = require("./app/v1/routes/v1Routes");
 
 const app = express();
 
@@ -37,37 +34,10 @@ app.use(
   })
 );
 
-// USER ROUTES
-app.post("/register", userController);
-app.post("/login", userController);
-app.put("/reset-password", userController);
-app.post("/change-password/:token", userController);
-app.post("/logout", userController);
-
-// PRODUCT ROUTES
-app.post("/products", productsController);
-app.get("/all-products", productsController);
-app.get("/product/:id", productsController);
-app.get("/products/category/:categoryId", productsController);
-app.put("/update-product/:id", productsController);
-app.delete("/delete-product/:id", productsController);
-
-// CATEGORIES ROUTES
-app.post("/categories", categoriesController);
-app.get("/all-categories", categoriesController);
-app.get("/categories/:id", categoriesController);
-app.put("/update-category/:id", categoriesController);
-app.delete("/delete-category/:id", categoriesController);
-
-// ORDERS ROUTES
-app.post("/orders", ordersController);
-app.put("/update-orders/:id", ordersController);
-app.get("/all-orders", ordersController);
-app.get("/orders/:id", ordersController);
-app.get("/orders/orders-items/:id", ordersController);
+app.use("/", v1Routes);
 
 // PAYMENT ROUTE - TEST ROUTE
-app.get("/payment", verifyToken, (req, res) => {
+app.get("/v1/payment", verifyToken, (req, res) => {
   res.send("You've done it!");
 });
 

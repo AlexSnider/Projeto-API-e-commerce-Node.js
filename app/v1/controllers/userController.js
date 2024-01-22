@@ -3,12 +3,14 @@ const {
   NotFoundException,
 } = require("../controllers/customExceptions/customExceptions");
 
-const User = require("../../models/User");
-const { createToken, createRefreshToken } = require("../../JWT/JWT");
+const User = require("../../../models/User");
+const { createToken, createRefreshToken, verifyToken } = require("../../../JWT/JWT");
 const sendEmail = require("../mail/passwordMailer");
-const UserRefreshToken = require("../../models/UserRefreshToken");
+const UserRefreshToken = require("../../../models/UserRefreshToken");
 const { Op } = require("sequelize");
 const argon2 = require("argon2");
+const { verify } = require("jsonwebtoken");
+const JWT_SECRET = process.env.JWT_SECRET;
 
 const userController = {};
 
@@ -97,6 +99,71 @@ userController.resetPassword = async (req, res) => {
       .json({ message: "Password reset link has been sent to the E-mail registered!" });
   } catch (error) {
     res.status(500).json({ message: error.message });
+  }
+};
+
+userController.resetPasswordLoggedUser = async (req, res) => {
+  try {
+    const token = req.cookies["access_token"];
+
+    if (!token) {
+      return res.status(400).json({ message: "Token is required!" });
+    }
+
+    const decodedUser = verify(token, JWT_SECRET, { complete: true }, (err, decoded) => {
+      if (err) {
+        return res.status(400).json({ message: "Invalid token!" });
+      }
+
+      return decoded.payload.id;
+    });
+
+    const { oldPassword, password, confirmPassword } = req.body;
+
+    if (!oldPassword || !password || !confirmPassword) {
+      return res.status(400).json({ message: "All fields are required!" });
+    }
+
+    if (password !== confirmPassword) {
+      return res
+        .status(400)
+        .json({ message: "The confirmation password do not match. Try again!" });
+    }
+
+    const findUser = await User.findOne({ where: { id: decodedUser } });
+
+    if (!findUser) {
+      return res.status(404).json({ message: "User not found!" });
+    }
+
+    const isPasswordValid = await argon2.verify(findUser.password, oldPassword);
+
+    if (!isPasswordValid) {
+      return res.status(400).json({ message: "Invalid old password! Try again." });
+    }
+
+    const hashedPassword = await argon2.hash(String(password), {
+      timeCost: 2,
+      memoryCost: 2 ** 12,
+      parallelism: 1,
+    });
+
+    await User.update({ password: hashedPassword }, { where: { id: decodedUser } });
+
+    res.clearCookie("access_token");
+    res.clearCookie("refresh_token");
+
+    res
+      .status(200)
+      .json({ message: "Password changed successfully! Please log in again..." });
+  } catch (error) {
+    if (error instanceof CustomValidationException) {
+      res.status(400).json({ message: error.message });
+    } else if (error instanceof NotFoundException) {
+      res.status(404).json({ message: error.message });
+    } else {
+      res.status(500).json({ message: error.message });
+    }
   }
 };
 
@@ -214,7 +281,7 @@ userController.loginUser = async (req, res) => {
       httpOnly: true,
       secure: true,
       sameSite: "none",
-      maxAge: 1000,
+      maxAge: refreshTokenDuration,
     });
 
     res.status(200).json({ message: "Login successful!", accessToken, refreshToken });

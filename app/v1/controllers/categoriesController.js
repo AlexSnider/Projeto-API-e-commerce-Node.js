@@ -1,4 +1,4 @@
-const Categories = require("../../models/Categories");
+const Categories = require("../../../models/Categories");
 const {
   CustomValidationException,
   NotFoundException,

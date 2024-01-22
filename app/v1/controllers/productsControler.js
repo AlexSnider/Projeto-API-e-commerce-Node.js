@@ -3,8 +3,8 @@ const {
   NotFoundException,
 } = require("../controllers/customExceptions/customExceptions");
 
-const Products = require("../../models/Products");
-const Categories = require("../../models/Categories");
+const Products = require("../../../models/Products");
+const Categories = require("../../../models/Categories");
 
 const productsController = {};
 

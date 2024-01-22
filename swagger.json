@@ -10,7 +10,7 @@
     "version": "1.0.0"
   },
   "paths": {
-    "/register": {
+    "/v1/register": {
       "post": {
         "tags": ["User"],
         "description": "Register a new user.",
@@ -58,7 +58,7 @@
         }
       }
     },
-    "/login": {
+    "/v1/login": {
       "post": {
         "tags": ["User"],
         "description": "Login a user.",
@@ -140,7 +140,7 @@
         }
       }
     },
-    "/logout": {
+    "/v1/logout": {
       "post": {
         "tags": ["User"],
         "description": "Logout a user.",
@@ -164,7 +164,7 @@
         }
       }
     },
-    "/change-password": {
+    "/v1/reset-password": {
       "put": {
         "tags": ["User"],
         "description": "Send request to change user password.",
@@ -201,7 +201,7 @@
         }
       }
     },
-    "/reset-password/{token}": {
+    "/v1/change-password/{token}": {
       "post": {
         "tags": ["User"],
         "parameters": [
@@ -277,7 +277,67 @@
         }
       }
     },
-    "/categories": {
+    "/v1/reset-password-logged-user": {
+      "post": {
+        "tags": ["User"],
+        "description": "Send request to reset user password.",
+        "requestBody": {
+          "description": "Necessary data to reset user password.",
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/RequestChangePasswordLoggedUser" }
+            }
+          }
+        },
+
+        "responses": {
+          "200": {
+            "description": "Password reseted successfully.",
+            "content": {
+              "application/json": { "$ref": "#/components/schemas/ResponseResetPassword" }
+            }
+          },
+          "400": {
+            "description": "New password is required.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "description": "Message error.",
+                      "example": "New password is required."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No token was provided.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "description": "Message error.",
+                      "example": "No token was provided."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error."
+          }
+        }
+      }
+    },
+    "/v1/categories": {
       "post": {
         "tags": ["Categories"],
         "description": "Create a category.",
@@ -325,7 +385,7 @@
         }
       }
     },
-    "/all-categories": {
+    "/v1/all-categories": {
       "get": {
         "tags": ["Categories"],
         "description": "Get all categories.",
@@ -346,7 +406,7 @@
         }
       }
     },
-    "/categories/{id}": {
+    "/v1/categories/{id}": {
       "get": {
         "tags": ["Categories"],
         "parameters": [
@@ -385,7 +445,7 @@
         }
       }
     },
-    "/update-category/{id}": {
+    "/v1/update-category/{id}": {
       "put": {
         "tags": ["Categories"],
         "parameters": [
@@ -433,7 +493,7 @@
         }
       }
     },
-    "/delete-category/{id}": {
+    "/v1/delete-category/{id}": {
       "delete": {
         "tags": ["Categories"],
         "parameters": [
@@ -468,7 +528,7 @@
         }
       }
     },
-    "/products": {
+    "/v1/products": {
       "post": {
         "tags": ["Products"],
         "description": "Create a new product.",
@@ -519,7 +579,7 @@
         }
       }
     },
-    "/all-products": {
+    "/v1/all-products": {
       "get": {
         "tags": ["Products"],
         "description": "Get all products.",
@@ -540,7 +600,7 @@
         }
       }
     },
-    "/product/{id}": {
+    "/v1/product/{id}": {
       "get": {
         "tags": ["Products"],
         "parameters": [
@@ -575,7 +635,7 @@
         }
       }
     },
-    "/products/category/{categoryId}": {
+    "/v1/products/category/{categoryId}": {
       "get": {
         "tags": ["Products"],
         "parameters": [
@@ -624,7 +684,7 @@
         }
       }
     },
-    "/update-product/{id}": {
+    "/v1/update-product/{id}": {
       "put": {
         "tags": ["Products"],
         "parameters": [
@@ -672,7 +732,7 @@
         }
       }
     },
-    "/delete-product/{id}": {
+    "/v1/delete-product/{id}": {
       "delete": {
         "tags": ["Products"],
         "parameters": [
@@ -707,7 +767,7 @@
         }
       }
     },
-    "/orders": {
+    "/v1/orders": {
       "post": {
         "tags": ["Orders"],
         "description": "Create a new order.",
@@ -786,7 +846,7 @@
         }
       }
     },
-    "/all-orders": {
+    "/v1/all-orders": {
       "get": {
         "tags": ["Orders"],
         "description": "Get all orders.",
@@ -810,7 +870,7 @@
         }
       }
     },
-    "/orders/{id}": {
+    "/v1/orders/{id}": {
       "get": {
         "tags": ["Orders"],
         "parameters": [
@@ -845,7 +905,7 @@
         }
       }
     },
-    "/orders/orders-items/{id}": {
+    "/v1/orders/orders-items/{id}": {
       "get": {
         "tags": ["Orders"],
         "parameters": [
@@ -881,7 +941,7 @@
         }
       }
     },
-    "/update-orders/{id}": {
+    "/v1/update-orders/{id}": {
       "put": {
         "tags": ["Orders"],
         "parameters": [
@@ -1005,11 +1065,6 @@
             "type": "string",
             "description": "User password.",
             "example": "aleX321%#!"
-          },
-          "token": {
-            "type": "string",
-            "description": "User token.",
-            "example": ""
           }
         }
       },
@@ -1070,6 +1125,11 @@
             "type": "string",
             "description": "User new password.",
             "example": "aleX321%#!"
+          },
+          "confirmPassword": {
+            "type": "string",
+            "description": "User new password.",
+            "example": "aleX321%#!"
           }
         }
       },
@@ -1080,6 +1140,36 @@
             "type": "string",
             "description": "Reset password message.",
             "example": "Password changed successfully."
+          }
+        }
+      },
+      "RequestChangePasswordLoggedUser": {
+        "type": "object",
+        "properties": {
+          "oldPassword": {
+            "type": "string",
+            "description": "User old password.",
+            "example": "aleX321%#!"
+          },
+          "password": {
+            "type": "string",
+            "description": "User new password.",
+            "example": "aleX321%#!"
+          },
+          "confirmPassword": {
+            "type": "string",
+            "description": "User confirm new password.",
+            "example": "aleX321%#!"
+          }
+        }
+      },
+      "ResponseChangePasswordLoggedUser": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "description": "Change password message.",
+            "example": "Password changed successfully! Please log in again with your new password."
           }
         }
       },

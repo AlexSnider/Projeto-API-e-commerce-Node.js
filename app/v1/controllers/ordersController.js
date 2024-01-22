@@ -3,12 +3,12 @@ const {
   NotFoundException,
 } = require("../controllers/customExceptions/customExceptions");
 
-const sequelize = require("../../db/dbConection.js");
-const createOrdersModel = require("../../models/Orders.js");
+const sequelize = require("../../../db/dbConection.js");
+const createOrdersModel = require("../../../models/Orders.js");
 const Orders = createOrdersModel(sequelize);
-const Products = require("../../models/Products.js");
-const OrdersItens = require("../../models/OrdersItens.js");
-const User = require("../../models/User.js");
+const Products = require("../../../models/Products.js");
+const OrdersItens = require("../../../models/OrdersItens.js");
+const User = require("../../../models/User.js");
 const dotenv = require("dotenv");
 dotenv.config();
 const sendEmail = require("../mail/orderMailer.js");
