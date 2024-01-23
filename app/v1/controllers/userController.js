@@ -19,7 +19,7 @@ userController.createUser = async (req, res) => {
     const { username, email, password } = req.body;
 
     if (!username || !email || !password) {
-      return res.status(400).json({ message: "All fields are required..." });
+      return res.status(400).json({ message: "All fields are required!" });
     }
 
     const existingUser = await User.findOne({
@@ -30,9 +30,13 @@ userController.createUser = async (req, res) => {
 
     if (existingUser) {
       if (existingUser.username === username) {
-        return res.status(400).json({ message: "Username already exists!" });
+        return res
+          .status(400)
+          .json({ message: "Oops! Something went wrong. Try again." });
       } else if (existingUser.email === email) {
-        return res.status(400).json({ message: "Email already exists!" });
+        return res
+          .status(400)
+          .json({ message: "Oops! Something went wrong. Try again." });
       }
     }
 
@@ -49,9 +53,8 @@ userController.createUser = async (req, res) => {
         password: hashedPassword,
       });
 
-      res.status(201).json({ message: "User created successfully!" });
+      res.status(201).json({ message: "If created successfully an email will be sent." });
     } catch (error) {
-      console.log("Error during password hashing: ", error);
       throw new CustomValidationException("Error during password hashing");
     }
   } catch (error) {
@@ -71,7 +74,7 @@ userController.resetPassword = async (req, res) => {
     const { email, username } = req.body;
 
     if (!email || !username) {
-      return res.status(400).json({ message: "All fields are required..." });
+      return res.status(400).json({ message: "All fields are required!" });
     }
 
     const userData = await User.findOne({
@@ -81,7 +84,7 @@ userController.resetPassword = async (req, res) => {
     });
 
     if (!userData) {
-      return res.status(404).json({ message: "User not found!" });
+      return res.status(404).json({ message: "Oops! Something went wrong." });
     }
 
     const userFound = userData ? userData.username : userData.email;
@@ -96,7 +99,7 @@ userController.resetPassword = async (req, res) => {
 
     res
       .status(200)
-      .json({ message: "Password reset link has been sent to the E-mail registered!" });
+      .json({ message: "Password reset link has been sent to the E-mail registered." });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
@@ -112,7 +115,7 @@ userController.resetPasswordLoggedUser = async (req, res) => {
 
     const decodedUser = verify(token, JWT_SECRET, { complete: true }, (err, decoded) => {
       if (err) {
-        return res.status(400).json({ message: "Invalid token!" });
+        return res.status(400).json({ message: "Oops! Something went wrong." });
       }
 
       return decoded.payload.id;
@@ -127,19 +130,19 @@ userController.resetPasswordLoggedUser = async (req, res) => {
     if (password !== confirmPassword) {
       return res
         .status(400)
-        .json({ message: "The confirmation password do not match. Try again!" });
+        .json({ message: "The confirmation password do not match. Try again." });
     }
 
     const findUser = await User.findOne({ where: { id: decodedUser } });
 
     if (!findUser) {
-      return res.status(404).json({ message: "User not found!" });
+      return res.status(404).json({ message: "Oops! Something went wrong." });
     }
 
     const isPasswordValid = await argon2.verify(findUser.password, oldPassword);
 
     if (!isPasswordValid) {
-      return res.status(400).json({ message: "Invalid old password! Try again." });
+      return res.status(400).json({ message: "Something went wrong. Try again." });
     }
 
     const hashedPassword = await argon2.hash(String(password), {
@@ -153,9 +156,7 @@ userController.resetPasswordLoggedUser = async (req, res) => {
     res.clearCookie("access_token");
     res.clearCookie("refresh_token");
 
-    res
-      .status(200)
-      .json({ message: "Password changed successfully! Please log in again..." });
+    res.status(200).json({ message: "If changed successfully you will be logged out." });
   } catch (error) {
     if (error instanceof CustomValidationException) {
       res.status(400).json({ message: error.message });
@@ -180,11 +181,11 @@ userController.changePasswordConfirmation = async (req, res) => {
     if (!password || !confirmPassword) {
       return res
         .status(400)
-        .json({ message: "The new password and it's confirmation is required!" });
+        .json({ message: "All fields are required!" });
     }
 
     if (password !== confirmPassword) {
-      return res.status(400).json({ message: "Passwords do not match. Try again!" });
+      return res.status(400).json({ message: "Something went wrong. Try again." });
     }
 
     const hashedPassword = await argon2.hash(String(password), {
@@ -196,7 +197,7 @@ userController.changePasswordConfirmation = async (req, res) => {
     const user = await User.findOne({ where: { resetPasswordToken: token } });
 
     if (!user) {
-      return res.status(404).json({ message: "User not found or invalid token!" });
+      return res.status(404).json({ message: "Something went wrong." });
     }
 
     const isDifferent = !(await argon2.verify(user.password, String(password)));
@@ -204,7 +205,7 @@ userController.changePasswordConfirmation = async (req, res) => {
     if (!isDifferent) {
       return res
         .status(400)
-        .json({ message: "New password must be different from the current password!" });
+        .json({ message: "Oops! Something went wrong. Try again." });
     }
 
     const [, updatedRows] = await User.update(
@@ -213,10 +214,10 @@ userController.changePasswordConfirmation = async (req, res) => {
     );
 
     if (updatedRows === 0) {
-      return res.status(404).json({ message: "Password not updated!" });
+      return res.status(404).json({ message: "Oops! Something went wrong." });
     }
 
-    res.status(200).json({ message: "Password updated successfully!" });
+    res.status(200).json({ message: "If changed successfully an email will be sent." });
   } catch (error) {
     if (error instanceof CustomValidationException) {
       res.status(400).json({ message: error.message });
@@ -233,7 +234,7 @@ userController.loginUser = async (req, res) => {
     const { username, password } = req.body;
 
     if (!username || !password) {
-      return res.status(400).json({ message: "All fields are required" });
+      return res.status(400).json({ message: "All fields are required!" });
     }
 
     const existingToken = req.cookies["access_token"];
@@ -245,13 +246,13 @@ userController.loginUser = async (req, res) => {
     const user = await User.findOne({ where: { username } });
 
     if (!user) {
-      return res.status(404).json({ message: "User not found!" });
+      return res.status(404).json({ message: "Oops! Something went wrong." });
     }
 
     const isPasswordValid = await argon2.verify(user.password, password);
 
     if (!isPasswordValid) {
-      return res.status(401).json({ message: "Invalid credentials!" });
+      return res.status(401).json({ message: "Oops! Something went wrong." });
     }
 
     const accessToken = createToken(user);
@@ -261,7 +262,7 @@ userController.loginUser = async (req, res) => {
     const refreshToken = createRefreshToken(user, refreshTokenDuration);
 
     if (!refreshToken || !accessToken) {
-      return res.status(500).json({ message: "Failed to generate token!" });
+      return res.status(500).json({ message: "Something went wrong." });
     }
 
     await UserRefreshToken.create({
@@ -284,7 +285,7 @@ userController.loginUser = async (req, res) => {
       maxAge: refreshTokenDuration,
     });
 
-    res.status(200).json({ message: "Login successful!", accessToken, refreshToken });
+    res.status(200).json({ message: "If logged in successfully you will be redirected." });
   } catch (error) {
     if (error instanceof CustomValidationException) {
       res.status(400).json({ message: error.message });
@@ -302,13 +303,13 @@ userController.logoutUser = async (req, res) => {
     const refreshToken = req.cookies["refresh_token"];
 
     if (!accessToken || !refreshToken) {
-      return res.status(404).json({ message: "No token was provided!" });
+      return res.status(404).json({ message: "Oops! Something went wrong." });
     }
 
     res.clearCookie("access_token");
     res.clearCookie("refresh_token");
 
-    res.status(200).json({ message: "Logout successfully done!" });
+    res.status(200).json({ message: "If logged out successfully you will be redirected." });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }

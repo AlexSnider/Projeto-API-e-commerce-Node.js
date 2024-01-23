@@ -13,7 +13,7 @@ productsController.createProduct = async (req, res) => {
     const { name, description, unit_price, stock, categoryId } = req.body;
 
     if (!name || !description || !unit_price || !stock || !categoryId) {
-      return res.status(400).json({ message: "All fields are required..." });
+      return res.status(400).json({ message: "All fields are required!" });
     }
 
     const existingProduct = await Products.findOne({ where: { name } });
@@ -23,8 +23,7 @@ productsController.createProduct = async (req, res) => {
 
     if (existingProduct) {
       return res.status(400).json({
-        message:
-          "Product already exists or it's name is the same as another product already created!",
+        message: "Oops! Something went wrong. Try again.",
       });
     }
 
@@ -32,12 +31,12 @@ productsController.createProduct = async (req, res) => {
 
     if (!existingCategory) {
       return res.status(404).json({
-        message: "Category not found. Try again selecting a valid category...",
+        message: "Oops! Something went wrong. Try again.",
         categories,
       });
     }
 
-    const product = await Products.create({
+    await Products.create({
       name,
       description,
       unit_price,
@@ -45,7 +44,7 @@ productsController.createProduct = async (req, res) => {
       categoryId,
     });
 
-    res.status(201).json({ message: "Product created successfully!", product });
+    res.status(201).json({ message: "If created successfully an email will be sent." });
   } catch (error) {
     if (error instanceof CustomValidationException) {
       res.status(400).json({ message: error.message });
@@ -82,7 +81,7 @@ productsController.getProductById = async (req, res) => {
     const product = await Products.findOne({ where: { id } });
 
     if (!product) {
-      return res.status(404).json({ message: "Product not found!" });
+      return res.status(404).json({ message: "Oops! Something went wrong." });
     }
 
     res.status(200).json(product);
@@ -102,11 +101,11 @@ productsController.getProductsByCategory = async (req, res) => {
     const category = await Categories.findAll();
 
     if (!category) {
-      return res.status(404).json({ message: "Category not found!" });
+      return res.status(404).json({ message: "Oops! Something went wrong." });
     }
 
     if (products.length === 0) {
-      return res.status(404).json({ message: "No products found in this category!" });
+      return res.status(404).json({ message: "Oops! Something went wrong." });
     }
 
     res.status(200).json(products);
@@ -129,7 +128,7 @@ productsController.updateProduct = async (req, res) => {
     const product = await Products.findOne({ where: { id } });
 
     if (!product) {
-      return res.status(404).json({ message: "Product not found!" });
+      return res.status(404).json({ message: "Oops! Something went wrong." });
     }
 
     const updateAttributes = {
@@ -156,11 +155,11 @@ productsController.updateProduct = async (req, res) => {
 
     if (!attributesFound) {
       return res.status(400).json({
-        message: "At least one field must be provided",
+        message: "At least one field must be provided.",
       });
     }
 
-    res.status(200).json({ message: "Product updated successfully" });
+    res.status(200).json({ message: "If updated successfully an email will be sent." });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
@@ -173,12 +172,12 @@ productsController.deleteProduct = async (req, res) => {
     const product = await Products.findOne({ where: { id } });
 
     if (!product) {
-      return res.status(404).json({ message: "Product not found!" });
+      return res.status(404).json({ message: "Oops! Something went wrong." });
     }
 
     await Products.destroy({ where: { id } });
 
-    res.status(200).json({ message: "Product deleted successfully!" });
+    res.status(200).json({ message: "If deleted successfully an email will be sent." });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
