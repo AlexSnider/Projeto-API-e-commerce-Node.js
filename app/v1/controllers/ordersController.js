@@ -174,7 +174,15 @@ ordersController.updateOrder = async (req, res) => {
 
 ordersController.getOrders = async (req, res) => {
   try {
-    const orders = await Orders.findAll();
+    const page = parseInt(req.query.page) || 1;
+    const pageSize = parseInt(req.query.pageSize) || 10;
+
+    const offset = (page - 1) * pageSize;
+
+    const orders = await Orders.findAll({
+      limit: pageSize,
+      offset: offset,
+    });
 
     if (!orders) {
       return res.status(404).json({ message: "Orders not found!" });

@@ -59,7 +59,15 @@ productsController.createProduct = async (req, res) => {
 
 productsController.getProducts = async (req, res) => {
   try {
-    const products = await Products.findAll();
+    const page = parseInt(req.query.page) || 1;
+    const pageSize = parseInt(req.query.pageSize) || 10;
+
+    const offset = (page - 1) * pageSize;
+
+    const products = await Products.findAll({
+      limit: pageSize,
+      offset: offset,
+    });
 
     res.status(200).json(products);
   } catch (error) {

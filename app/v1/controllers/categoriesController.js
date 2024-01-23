@@ -36,7 +36,15 @@ categoriesController.createCategory = async (req, res) => {
 
 categoriesController.getCategory = async (req, res) => {
   try {
-    const categories = await Categories.findAll();
+    const page = parseInt(req.query.page) || 1;
+    const pageSize = parseInt(req.query.pageSize) || 10;
+
+    const offset = (page - 1) * pageSize;
+
+    const categories = await Categories.findAll({
+      limit: pageSize,
+      offset: offset,
+    });
 
     res.status(200).json(categories);
   } catch (error) {
