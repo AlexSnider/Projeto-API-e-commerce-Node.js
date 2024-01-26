@@ -53,18 +53,26 @@ userController.createUser = async (req, res) => {
         password: hashedPassword,
       });
 
-      res.status(201).json({ message: "If created successfully an email will be sent." });
+      res
+        .status(201)
+        .json({
+          error: false,
+          message: "If created successfully an email will be sent.",
+        });
     } catch (error) {
-      throw new CustomValidationException("Error during password hashing");
+      throw new CustomValidationException({
+        error: true,
+        message: "Error during password hashing",
+      });
     }
   } catch (error) {
     console.log(error);
     if (error instanceof CustomValidationException) {
-      res.status(400).json({ message: error.message });
+      res.status(400).json({ error: true, message: error.message });
     } else if (error instanceof NotFoundException) {
-      res.status(404).json({ message: error.message });
+      res.status(404).json({ error: true, message: error.message });
     } else {
-      res.status(500).json({ message: error.message });
+      res.status(500).json({ error: true, message: error.message });
     }
   }
 };
@@ -74,7 +82,7 @@ userController.resetPassword = async (req, res) => {
     const { email, username } = req.body;
 
     if (!email || !username) {
-      return res.status(400).json({ message: "All fields are required!" });
+      return res.status(400).json({ error: true, message: "All fields are required!" });
     }
 
     const userData = await User.findOne({
@@ -84,7 +92,9 @@ userController.resetPassword = async (req, res) => {
     });
 
     if (!userData) {
-      return res.status(404).json({ message: "Oops! Something went wrong." });
+      return res
+        .status(404)
+        .json({ error: true, message: "Oops! Something went wrong." });
     }
 
     const userFound = userData ? userData.username : userData.email;
@@ -99,9 +109,12 @@ userController.resetPassword = async (req, res) => {
 
     res
       .status(200)
-      .json({ message: "Password reset link has been sent to the E-mail registered." });
+      .json({
+        error: false,
+        message: "Password reset link has been sent to the E-mail registered.",
+      });
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    res.status(500).json({ error: true, message: error.message });
   }
 };
 
@@ -156,14 +169,16 @@ userController.resetPasswordLoggedUser = async (req, res) => {
     res.clearCookie("access_token");
     res.clearCookie("refresh_token");
 
-    res.status(200).json({ message: "If changed successfully you will be logged out." });
+    res
+      .status(200)
+      .json({ error: false, message: "If changed successfully you will be logged out." });
   } catch (error) {
     if (error instanceof CustomValidationException) {
-      res.status(400).json({ message: error.message });
+      res.status(400).json({ error: true, message: error.message });
     } else if (error instanceof NotFoundException) {
-      res.status(404).json({ message: error.message });
+      res.status(404).json({ error: true, message: error.message });
     } else {
-      res.status(500).json({ message: error.message });
+      res.status(500).json({ error: true, message: error.message });
     }
   }
 };
@@ -179,9 +194,7 @@ userController.changePasswordConfirmation = async (req, res) => {
     const { password, confirmPassword } = req.body;
 
     if (!password || !confirmPassword) {
-      return res
-        .status(400)
-        .json({ message: "All fields are required!" });
+      return res.status(400).json({ message: "All fields are required!" });
     }
 
     if (password !== confirmPassword) {
@@ -203,9 +216,7 @@ userController.changePasswordConfirmation = async (req, res) => {
     const isDifferent = !(await argon2.verify(user.password, String(password)));
 
     if (!isDifferent) {
-      return res
-        .status(400)
-        .json({ message: "Oops! Something went wrong. Try again." });
+      return res.status(400).json({ message: "Oops! Something went wrong. Try again." });
     }
 
     const [, updatedRows] = await User.update(
@@ -217,14 +228,16 @@ userController.changePasswordConfirmation = async (req, res) => {
       return res.status(404).json({ message: "Oops! Something went wrong." });
     }
 
-    res.status(200).json({ message: "If changed successfully an email will be sent." });
+    res
+      .status(200)
+      .json({ error: false, message: "If changed successfully an email will be sent." });
   } catch (error) {
     if (error instanceof CustomValidationException) {
-      res.status(400).json({ message: error.message });
+      res.status(400).json({ error: true, message: error.message });
     } else if (error instanceof NotFoundException) {
-      res.status(404).json({ message: error.message });
+      res.status(404).json({ error: true, message: error.message });
     } else {
-      res.status(500).json({ message: error.message });
+      res.status(500).json({ error: true, message: error.message });
     }
   }
 };
@@ -285,14 +298,19 @@ userController.loginUser = async (req, res) => {
       maxAge: refreshTokenDuration,
     });
 
-    res.status(200).json({ message: "If logged in successfully you will be redirected." });
+    res
+      .status(200)
+      .json({
+        error: false,
+        message: "If logged in successfully you will be redirected.",
+      });
   } catch (error) {
     if (error instanceof CustomValidationException) {
-      res.status(400).json({ message: error.message });
+      res.status(400).json({ error: true, message: error.message });
     } else if (error instanceof NotFoundException) {
-      res.status(404).json({ message: error.message });
+      res.status(404).json({ error: true, message: error.message });
     } else {
-      res.status(500).json({ message: error.message });
+      res.status(500).json({ error: true, message: error.message });
     }
   }
 };
@@ -309,9 +327,11 @@ userController.logoutUser = async (req, res) => {
     res.clearCookie("access_token");
     res.clearCookie("refresh_token");
 
-    res.status(200).json({ message: "If logged out successfully you will be redirected." });
+    res
+      .status(200)
+      .json({error: false, message: "If logged out successfully you will be redirected." });
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    res.status(500).json({error: true, message: error.message });
   }
 };
 

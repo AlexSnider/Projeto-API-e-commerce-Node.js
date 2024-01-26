@@ -44,14 +44,14 @@ productsController.createProduct = async (req, res) => {
       categoryId,
     });
 
-    res.status(201).json({ message: "If created successfully an email will be sent." });
+    res.status(201).json({error: false, message: "If created successfully an email will be sent." });
   } catch (error) {
     if (error instanceof CustomValidationException) {
-      res.status(400).json({ message: error.message });
+      res.status(400).json({error: true, message: error.message });
     } else if (error instanceof NotFoundException) {
-      res.status(404).json({ message: error.message });
+      res.status(404).json({error: true, message: error.message });
     } else {
-      res.status(500).json({ message: error.message });
+      res.status(500).json({error: true, message: error.message });
     }
   }
 };
@@ -68,9 +68,9 @@ productsController.getProducts = async (req, res) => {
       offset: offset,
     });
 
-    res.status(200).json(products);
+    res.status(200).json({error: false, products});
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    res.status(500).json({error: true, message: error.message });
   }
 };
 
@@ -81,12 +81,12 @@ productsController.getProductById = async (req, res) => {
     const product = await Products.findOne({ where: { id } });
 
     if (!product) {
-      return res.status(404).json({ message: "Oops! Something went wrong." });
+      return res.status(404).json({error: true, message: "Oops! Something went wrong." });
     }
 
-    res.status(200).json(product);
+    res.status(200).json({error: false, product});
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    res.status(500).json({error: true, message: error.message });
   }
 };
 
@@ -108,14 +108,14 @@ productsController.getProductsByCategory = async (req, res) => {
       return res.status(404).json({ message: "Oops! Something went wrong." });
     }
 
-    res.status(200).json(products);
+    res.status(200).json({error: false, products});
   } catch (error) {
     if (error instanceof CustomValidationException) {
-      res.status(400).json({ message: error.message });
+      res.status(400).json({error: true, message: error.message });
     } else if (error instanceof NotFoundException) {
-      res.status(404).json({ message: error.message });
+      res.status(404).json({error: true, message: error.message });
     } else {
-      res.status(500).json({ message: error.message });
+      res.status(500).json({error: true, message: error.message });
     }
   }
 };
@@ -128,7 +128,7 @@ productsController.updateProduct = async (req, res) => {
     const product = await Products.findOne({ where: { id } });
 
     if (!product) {
-      return res.status(404).json({ message: "Oops! Something went wrong." });
+      return res.status(404).json({error: true, message: "Oops! Something went wrong." });
     }
 
     const updateAttributes = {
@@ -155,13 +155,14 @@ productsController.updateProduct = async (req, res) => {
 
     if (!attributesFound) {
       return res.status(400).json({
+        error: true,
         message: "At least one field must be provided.",
       });
     }
 
-    res.status(200).json({ message: "If updated successfully an email will be sent." });
+    res.status(200).json({error: false, message: "If updated successfully an email will be sent." });
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    res.status(500).json({error: true, message: error.message });
   }
 };
 
@@ -172,14 +173,14 @@ productsController.deleteProduct = async (req, res) => {
     const product = await Products.findOne({ where: { id } });
 
     if (!product) {
-      return res.status(404).json({ message: "Oops! Something went wrong." });
+      return res.status(404).json({error: true, message: "Oops! Something went wrong." });
     }
 
     await Products.destroy({ where: { id } });
 
-    res.status(200).json({ message: "If deleted successfully an email will be sent." });
+    res.status(200).json({error: false, message: "If deleted successfully an email will be sent." });
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    res.status(500).json({error: true, message: error.message });
   }
 };
 

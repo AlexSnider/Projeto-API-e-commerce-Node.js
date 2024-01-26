@@ -25,11 +25,11 @@ categoriesController.createCategory = async (req, res) => {
     res.status(201).json({ message: "If created successfully an email will be sent." });
   } catch (error) {
     if (error instanceof CustomValidationException) {
-      res.status(400).json({ message: error.message });
+      res.status(400).json({ error: true, message: error.message });
     } else if (error instanceof NotFoundException) {
-      res.status(404).json({ message: error.message });
+      res.status(404).json({ error: true, message: error.message });
     } else {
-      res.status(500).json({ message: error.message });
+      res.status(500).json({ error: true, message: error.message });
     }
   }
 };
@@ -46,9 +46,9 @@ categoriesController.getCategory = async (req, res) => {
       offset: offset,
     });
 
-    res.status(200).json(categories);
+    res.status(200).json({ error: false, categories });
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    res.status(500).json({ error: true, message: error.message });
   }
 };
 
@@ -59,12 +59,14 @@ categoriesController.getCategoryById = async (req, res) => {
     const category = await Categories.findOne({ where: { id } });
 
     if (!category) {
-      return res.status(404).json({ message: "Results displayed." });
+      return res
+        .status(404)
+        .json({ error: true, message: "Oops! Something went wrong." });
     }
 
-    res.status(200).json(category);
+    res.status(200).json({ error: false, category });
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    res.status(500).json({ error: true, message: error.message });
   }
 };
 
@@ -74,20 +76,22 @@ categoriesController.updateCategory = async (req, res) => {
     const { category_name } = req.body;
 
     if (!category_name) {
-      return res.status(400).json({ message: "All fields are required!" });
+      return res.status(400).json({ error: true, message: "All fields are required!" });
     }
 
     const category = await Categories.findOne({ where: { id } });
 
     if (!category) {
-      return res.status(404).json({ message: "Results displayed." });
+      return res.status(404).json({ error: true, message: "Results displayed." });
     }
 
     await category.update({ category_name });
 
-    res.status(200).json({ message: "If updated successfully an email will be sent." });
+    res
+      .status(200)
+      .json({ error: false, message: "If updated successfully an email will be sent." });
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    res.status(500).json({ error: true, message: error.message });
   }
 };
 
@@ -98,14 +102,18 @@ categoriesController.deleteCategory = async (req, res) => {
     const category = await Categories.findOne({ where: { id } });
 
     if (!category) {
-      return res.status(404).json({ message: "Results displayed." });
+      return res
+        .status(404)
+        .json({ error: true, message: "Oops! Something went wrong." });
     }
 
     await category.destroy();
 
-    res.status(200).json({ message: "If deleted successfully an email will be sent." });
+    res
+      .status(200)
+      .json({ error: false, message: "If deleted successfully an email will be sent." });
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    res.status(500).json({ error: true, message: error.message });
   }
 };
 
