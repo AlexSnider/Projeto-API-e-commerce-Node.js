@@ -9,7 +9,7 @@ const ordersController = require("../controllers/ordersController");
 // USER ROUTES
 router.post("/v1/register", userController.createUser);
 router.post("/v1/login", userController.loginUser);
-router.put("/v1/reset-password", userController.resetPassword);
+router.post("/v1/reset-password", userController.resetPassword);
 router.post("/v1/change-password/:token", userController.changePasswordConfirmation);
 router.post("/v1/reset-password-logged-user", userController.resetPasswordLoggedUser);
 router.post("/v1/logout", userController.logoutUser);

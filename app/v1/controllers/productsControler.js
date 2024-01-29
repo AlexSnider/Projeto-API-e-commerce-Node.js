@@ -44,14 +44,19 @@ productsController.createProduct = async (req, res) => {
       categoryId,
     });
 
-    res.status(201).json({error: false, message: "If created successfully an email will be sent." });
+    const products = await Products.findOne({ where: { name } });
+    res.location(`/v1/products/${products.id}`);
+
+    res
+      .status(201)
+      .json({ error: false, message: "If created successfully an email will be sent." });
   } catch (error) {
     if (error instanceof CustomValidationException) {
-      res.status(400).json({error: true, message: error.message });
+      res.status(400).json({ error: true, message: error.message });
     } else if (error instanceof NotFoundException) {
-      res.status(404).json({error: true, message: error.message });
+      res.status(404).json({ error: true, message: error.message });
     } else {
-      res.status(500).json({error: true, message: error.message });
+      res.status(500).json({ error: true, message: error.message });
     }
   }
 };
@@ -68,9 +73,9 @@ productsController.getProducts = async (req, res) => {
       offset: offset,
     });
 
-    res.status(200).json({error: false, products});
+    res.status(200).json({ error: false, products });
   } catch (error) {
-    res.status(500).json({error: true, message: error.message });
+    res.status(500).json({ error: true, message: error.message });
   }
 };
 
@@ -81,12 +86,14 @@ productsController.getProductById = async (req, res) => {
     const product = await Products.findOne({ where: { id } });
 
     if (!product) {
-      return res.status(404).json({error: true, message: "Oops! Something went wrong." });
+      return res
+        .status(404)
+        .json({ error: true, message: "Oops! Something went wrong." });
     }
 
-    res.status(200).json({error: false, product});
+    res.status(200).json({ error: false, product });
   } catch (error) {
-    res.status(500).json({error: true, message: error.message });
+    res.status(500).json({ error: true, message: error.message });
   }
 };
 
@@ -108,14 +115,14 @@ productsController.getProductsByCategory = async (req, res) => {
       return res.status(404).json({ message: "Oops! Something went wrong." });
     }
 
-    res.status(200).json({error: false, products});
+    res.status(200).json({ error: false, products });
   } catch (error) {
     if (error instanceof CustomValidationException) {
-      res.status(400).json({error: true, message: error.message });
+      res.status(400).json({ error: true, message: error.message });
     } else if (error instanceof NotFoundException) {
-      res.status(404).json({error: true, message: error.message });
+      res.status(404).json({ error: true, message: error.message });
     } else {
-      res.status(500).json({error: true, message: error.message });
+      res.status(500).json({ error: true, message: error.message });
     }
   }
 };
@@ -128,7 +135,9 @@ productsController.updateProduct = async (req, res) => {
     const product = await Products.findOne({ where: { id } });
 
     if (!product) {
-      return res.status(404).json({error: true, message: "Oops! Something went wrong." });
+      return res
+        .status(404)
+        .json({ error: true, message: "Oops! Something went wrong." });
     }
 
     const updateAttributes = {
@@ -160,9 +169,11 @@ productsController.updateProduct = async (req, res) => {
       });
     }
 
-    res.status(200).json({error: false, message: "If updated successfully an email will be sent." });
+    res
+      .status(200)
+      .json({ error: false, message: "If updated successfully an email will be sent." });
   } catch (error) {
-    res.status(500).json({error: true, message: error.message });
+    res.status(500).json({ error: true, message: error.message });
   }
 };
 
@@ -173,14 +184,18 @@ productsController.deleteProduct = async (req, res) => {
     const product = await Products.findOne({ where: { id } });
 
     if (!product) {
-      return res.status(404).json({error: true, message: "Oops! Something went wrong." });
+      return res
+        .status(404)
+        .json({ error: true, message: "Oops! Something went wrong." });
     }
 
     await Products.destroy({ where: { id } });
 
-    res.status(200).json({error: false, message: "If deleted successfully an email will be sent." });
+    res
+      .status(200)
+      .json({ error: false, message: "If deleted successfully an email will be sent." });
   } catch (error) {
-    res.status(500).json({error: true, message: error.message });
+    res.status(500).json({ error: true, message: error.message });
   }
 };
 

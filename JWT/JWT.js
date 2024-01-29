@@ -1,17 +1,21 @@
 const JWT_SECRET = process.env.JWT_SECRET;
 const REFRESH_TOKEN_SECRET = process.env.REFRESH_TOKEN_SECRET;
 
+const UserAccessToken = require("../models/UserAccessToken");
 const UserRefreshToken = require("../models/UserRefreshToken");
 
 const { sign, verify } = require("jsonwebtoken");
 
-const createToken = (user) => {
+const createToken = (user, expiresIn) => {
   const accessToken = sign(
     {
       id: user.id,
       username: user.username,
     },
-    JWT_SECRET
+    JWT_SECRET,
+    {
+      expiresIn,
+    }
   );
 
   return accessToken;
@@ -45,20 +49,31 @@ const renewAccessToken = async (req, res, next) => {
     const refreshToken = req.cookies["refresh_token"];
 
     if (!refreshToken) {
-      return res.status(401).json({ message: "Unauthorized" });
+      return res.status(400).json({ message: "Unauthorized!" });
     }
 
     const decodedRefreshToken = verify(refreshToken, REFRESH_TOKEN_SECRET);
     const user = decodedRefreshToken.user;
 
-    const validToken = await UserRefreshToken.findOne({
+    const validAccessToken = await UserAccessToken.findOne({
+      where: {
+        userId: user.id,
+        revoked: false,
+      },
+    });
+
+    if (!validAccessToken) {
+      return res.status(400).json({ message: "Unauthorized!" });
+    }
+
+    const validRefreshToken = await UserRefreshToken.findOne({
       where: {
         refreshToken: refreshToken,
         revoked: false,
       },
     });
 
-    if (!validToken) {
+    if (!validRefreshToken) {
       return res.status(401).json({ message: "Refresh token revoked!" });
     }
 
@@ -71,10 +86,8 @@ const renewAccessToken = async (req, res, next) => {
       maxAge: 24 * 60 * 60 * 1000,
     });
 
-    await UserRefreshToken.update(
-      { revoked: true },
-      { where: { refreshToken: refreshToken } }
-    );
+    await validAccessToken.update({ revoked: true });
+    await validRefreshToken.update({ revoked: true });
 
     return next();
   } catch (err) {

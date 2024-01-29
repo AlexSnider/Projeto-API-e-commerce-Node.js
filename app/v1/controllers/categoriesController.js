@@ -22,6 +22,10 @@ categoriesController.createCategory = async (req, res) => {
 
     await Categories.create({ category_name });
 
+    const findCategory = await Categories.findOne({ where: { category_name } });
+
+    res.location(`/v1/categories/${findCategory.id}`);
+
     res.status(201).json({ message: "If created successfully an email will be sent." });
   } catch (error) {
     if (error instanceof CustomValidationException) {

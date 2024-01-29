@@ -63,6 +63,7 @@ ordersController.createOrder = async (req, res) => {
           payment_method,
           order_total_price,
         },
+
         { transaction: t }
       );
 
@@ -87,23 +88,26 @@ ordersController.createOrder = async (req, res) => {
 
       if (status === "pending" || status === "paid") {
         sendEmail(user, status, order_total_price, payment_method, items);
-
-        return res.status(201).json({
-          error: false,
-          message: "If created successfully an email will be sent.",
-          order,
-          order_total_price,
-          ordersItems: items,
-        });
       }
+
+      const findOrderURL = `/v1/orders/${order.id}`;
+      res.location(findOrderURL);
+
+      res.status(201).json({
+        error: false,
+        message: "If created successfully an email will be sent.",
+        order,
+        order_total_price,
+        ordersItems: items,
+      });
     });
   } catch (error) {
     if (error instanceof CustomValidationException) {
-      res.status(400).json({error: true, message: error.message });
+      res.status(400).json({ error: true, message: error.message });
     } else if (error instanceof NotFoundException) {
-      res.status(404).json({error: true, message: error.message });
+      res.status(404).json({ error: true, message: error.message });
     } else {
-      res.status(500).json({error: true, message: error.message });
+      res.status(500).json({ error: true, message: error.message });
     }
   }
 };
@@ -155,20 +159,24 @@ ordersController.updateOrder = async (req, res) => {
       }
 
       await t.commit();
-      return res.status(200).json({ message: "If created successfully an email will be sent." });
+      return res
+        .status(200)
+        .json({ message: "If created successfully an email will be sent." });
     }
 
     await t.commit();
-    res.status(200).json({error: false, message: "If created successfully an email will be sent." });
+    res
+      .status(200)
+      .json({ error: false, message: "If created successfully an email will be sent." });
   } catch (error) {
     await t.rollback();
 
     if (error instanceof CustomValidationException) {
-      res.status(400).json({error: true, message: error.message });
+      res.status(400).json({ error: true, message: error.message });
     } else if (error instanceof NotFoundException) {
-      res.status(404).json({error: true, message: error.message });
+      res.status(404).json({ error: true, message: error.message });
     } else {
-      res.status(500).json({error: true, message: error.message });
+      res.status(500).json({ error: true, message: error.message });
     }
   }
 };
@@ -186,12 +194,14 @@ ordersController.getOrders = async (req, res) => {
     });
 
     if (!orders) {
-      return res.status(404).json({error: true, message: "Oops! Something went wrong." });
+      return res
+        .status(404)
+        .json({ error: true, message: "Oops! Something went wrong." });
     }
 
-    res.status(200).json({error: false, orders});
+    res.status(200).json({ error: false, orders });
   } catch (error) {
-    res.status(500).json({error: true, message: error.message });
+    res.status(500).json({ error: true, message: error.message });
   }
 };
 
@@ -200,12 +210,14 @@ ordersController.getOrderById = async (req, res) => {
     const order = await Orders.findOne({ where: { id: req.params.id } });
 
     if (!order) {
-      return res.status(404).json({error: true, message: "Oops! Something went wrong." });
+      return res
+        .status(404)
+        .json({ error: true, message: "Oops! Something went wrong." });
     }
 
-    res.status(200).json({error: false, order});
+    res.status(200).json({ error: false, order });
   } catch (error) {
-    res.status(500).json({error: true, message: error.message });
+    res.status(500).json({ error: true, message: error.message });
   }
 };
 
@@ -225,7 +237,9 @@ ordersController.getOrdersItensByOrderId = async (req, res) => {
     });
 
     if (!orderWithItems) {
-      return res.status(404).json({error: true, message: "Oops! Something went wrong." });
+      return res
+        .status(404)
+        .json({ error: true, message: "Oops! Something went wrong." });
     }
 
     const combinedData = {
@@ -245,9 +259,9 @@ ordersController.getOrdersItensByOrderId = async (req, res) => {
       })),
     };
 
-    res.status(200).json({error: false, ...combinedData});
+    res.status(200).json({ error: false, ...combinedData });
   } catch (error) {
-    res.status(500).json({error: true, message: error.message });
+    res.status(500).json({ error: true, message: error.message });
   }
 };
 
