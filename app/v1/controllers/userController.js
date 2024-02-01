@@ -10,6 +10,7 @@ const UserAccessToken = require("../../../models/UserAccessToken");
 const UserRefreshToken = require("../../../models/UserRefreshToken");
 const { Op } = require("sequelize");
 const argon2 = require("argon2");
+const logger = require("../../utils/logger");
 const { verify } = require("jsonwebtoken");
 const JWT_SECRET = process.env.JWT_SECRET;
 
@@ -31,13 +32,9 @@ userController.createUser = async (req, res) => {
 
     if (existingUser) {
       if (existingUser.username === username) {
-        return res
-          .status(400)
-          .json({ message: "Oops! Something went wrong. Try again." });
+        return res.status(400).json({ message: "Oops! Something went wrong. Try again." });
       } else if (existingUser.email === email) {
-        return res
-          .status(400)
-          .json({ message: "Oops! Something went wrong. Try again." });
+        return res.status(400).json({ message: "Oops! Something went wrong. Try again." });
       }
     }
 
@@ -94,9 +91,7 @@ userController.resetPassword = async (req, res) => {
     });
 
     if (!userData) {
-      return res
-        .status(404)
-        .json({ error: true, message: "Oops! Something went wrong." });
+      return res.status(404).json({ error: true, message: "Oops! Something went wrong." });
     }
 
     const userFound = userData ? userData.username : userData.email;
@@ -227,15 +222,10 @@ userController.changePasswordConfirmation = async (req, res) => {
       parallelism: 1,
     });
 
-    const isDifferent = !(await argon2.verify(
-      userResetPasswordToken.password,
-      String(password)
-    ));
+    const isDifferent = !(await argon2.verify(userResetPasswordToken.password, String(password)));
 
     if (!isDifferent) {
-      return res
-        .status(400)
-        .json({ message: "Oops! Something went wrong. Try again. 6" });
+      return res.status(400).json({ message: "Oops! Something went wrong. Try again. 6" });
     }
 
     const [, updatedRows] = await User.update(
@@ -266,24 +256,36 @@ userController.loginUser = async (req, res) => {
     const { username, password } = req.body;
 
     if (!username || !password) {
+      logger.warn(
+        `User ${username} tried to login without username or password, on ${new Date()}, at endpoint "v1/users/login"`
+      );
       return res.status(400).json({ message: "All fields are required!" });
     }
 
     const existingToken = req.cookies["access_token"];
 
     if (existingToken) {
+      logger.warn(
+        `User ${username} tried to login while already logged in, on ${new Date()}, at endpoint "v1/users/login"`
+      );
       return res.status(400).json({ message: "You are already logged in!" });
     }
 
     const user = await User.findOne({ where: { username } });
 
     if (!user) {
+      logger.warn(
+        `User ${username} tried to login without a valid username, on ${new Date()}, at endpoint "v1/users/login"`
+      );
       return res.status(404).json({ message: "Oops! Something went wrong. 1" });
     }
 
     const isPasswordValid = await argon2.verify(user.password, password);
 
     if (!isPasswordValid) {
+      logger.warn(
+        `User ${username} tried to login without a valid password, on ${new Date()}, at endpoint "v1/users/login"`
+      );
       return res.status(400).json({ message: "Oops! Something went wrong. 2" });
     }
 
@@ -294,6 +296,9 @@ userController.loginUser = async (req, res) => {
     const refreshToken = createRefreshToken(user, refreshTokenDuration);
 
     if (!refreshToken || !accessToken) {
+      logger.error(
+        `User ${username} tried to login without a valid token or refresh token, on ${new Date()}, at endpoint "v1/users/login"`
+      );
       return res.status(500).json({ message: "Something went wrong. 3" });
     }
 
@@ -323,6 +328,14 @@ userController.loginUser = async (req, res) => {
       maxAge: refreshTokenDuration,
     });
 
+    logger.info(
+      `User ${username} AccessToken and RefreshToken created, on ${new Date()}, at endpoint "v1/users/login"`
+    );
+
+    logger.info(
+      `User ${username} logged in successfully, on ${new Date()}, at endpoint "v1/users/login"`
+    );
+
     res.status(200).json({
       error: false,
       message: "If logged in successfully you will be redirected.",
@@ -335,6 +348,8 @@ userController.loginUser = async (req, res) => {
     } else {
       res.status(500).json({ error: true, message: error.message });
     }
+  } finally {
+    span.end();
   }
 };
 
