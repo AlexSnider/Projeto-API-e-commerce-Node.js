@@ -1,4 +1,5 @@
 const express = require("express");
+const rateLimit = require("express-rate-limit");
 const router = express.Router();
 
 const userController = require("../controllers/userController");
@@ -6,13 +7,19 @@ const productsController = require("../controllers/productsControler");
 const categoriesController = require("../controllers/categoriesController");
 const ordersController = require("../controllers/ordersController");
 
+const limiter = rateLimit({
+  windowMs: 0.5 * 60 * 1000,
+  max: 2,
+  message: "Too many requests from this IP, please try again after 30 seconds.",
+});
+
 // USER ROUTES
-router.post("/v1/register", userController.createUser);
-router.post("/v1/login", userController.loginUser);
-router.post("/v1/reset-password", userController.resetPassword);
-router.post("/v1/change-password/:token", userController.changePasswordConfirmation);
-router.post("/v1/reset-password-logged-user", userController.resetPasswordLoggedUser);
-router.post("/v1/logout", userController.logoutUser);
+router.post("/v1/register", limiter, userController.createUser);
+router.post("/v1/login", limiter, userController.loginUser);
+router.post("/v1/reset-password", limiter, userController.resetPassword);
+router.post("/v1/change-password/:token", limiter, userController.changePasswordConfirmation);
+router.post("/v1/reset-password-logged-user", limiter, userController.resetPasswordLoggedUser);
+router.post("/v1/logout", limiter, userController.logoutUser);
 
 // PRODUCTS ROUTES
 router.post("/v1/products", productsController.createProduct);
