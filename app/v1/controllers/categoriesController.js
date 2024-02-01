@@ -1,8 +1,9 @@
-const Categories = require("../../../models/Categories");
 const {
   CustomValidationException,
   NotFoundException,
 } = require("../controllers/customExceptions/customExceptions");
+const Categories = require("../../../models/Categories");
+const logger = require("../../utils/logger");
 
 const categoriesController = {};
 
@@ -50,8 +51,18 @@ categoriesController.getCategory = async (req, res) => {
       offset: offset,
     });
 
+    logger.info(
+      `Retrieved ${
+        categories.length
+      } categories, on ${new Date()}, using "GET", at "/v1/categories" endpoint.`
+    );
     res.status(200).json({ error: false, categories });
   } catch (error) {
+    logger.error(
+      `Failed to retrieve categories, on ${new Date()}, using "GET", at "/v1/categories" endpoint. ${
+        error.message
+      }`
+    );
     res.status(500).json({ error: true, message: error.message });
   }
 };
