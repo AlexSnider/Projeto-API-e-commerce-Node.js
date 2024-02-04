@@ -348,8 +348,6 @@ userController.loginUser = async (req, res) => {
     } else {
       res.status(500).json({ error: true, message: error.message });
     }
-  } finally {
-    span.end();
   }
 };
 

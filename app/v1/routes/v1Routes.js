@@ -1,5 +1,8 @@
 const express = require("express");
+const session = require("express-session");
+const Keycloak = require("keycloak-connect");
 const rateLimit = require("express-rate-limit");
+const ip = require("ip");
 const router = express.Router();
 
 const userController = require("../controllers/userController");
@@ -7,10 +10,31 @@ const productsController = require("../controllers/productsControler");
 const categoriesController = require("../controllers/categoriesController");
 const ordersController = require("../controllers/ordersController");
 
+router.use(session({ secret: "keyboard cat", resave: false, saveUninitialized: true }));
+
+const keycloak = new Keycloak({
+  store: session.MemoryStore,
+  barerOnly: false,
+});
+
+router.use(keycloak.middleware());
+
+router.use((req, res, next) => {
+  req.clientIp = ip.address();
+  next();
+});
+
 const limiter = rateLimit({
   windowMs: 0.5 * 60 * 1000,
-  max: 2,
-  message: "Too many requests from this IP, please try again after 30 seconds.",
+  max: 20,
+  keyGenerator: (req) => req.clientIp,
+  handler: (req, res) => {
+    res.status(429).json({
+      error: true,
+      message: "Too many requests, please try again later.",
+      clientIp: req.clientIp,
+    });
+  },
 });
 
 // USER ROUTES
@@ -25,7 +49,11 @@ router.post("/v1/logout", limiter, userController.logoutUser);
 router.post("/v1/products", productsController.createProduct);
 router.get("/v1/all-products", productsController.getProducts);
 router.get("/v1/product/:id", productsController.getProductById);
-router.get("/v1/products/category/:categoryId", productsController.getProductsByCategory);
+router.get(
+  "/v1/products/category/:categoryId",
+  keycloak.protect(),
+  productsController.getProductsByCategory
+);
 router.put("/v1/update-product/:id", productsController.updateProduct);
 router.delete("/v1/delete-product/:id", productsController.deleteProduct);
 
