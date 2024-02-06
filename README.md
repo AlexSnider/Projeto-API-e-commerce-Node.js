@@ -91,8 +91,6 @@ Me propus a construir uma API com as tecnologias listadas e o resultado está se
 A estrutura é simples, são pequenos gerenciamentos de uma mini loja, mas a ideia principal foi entregar algo de uso prático e estruturado.
 Houveram complicações em como manejar ordens e itens de maneira simultânea, mas consegui lidar com o desafio.
 
-A próxima ideia é criar um frontend para essa API e fechar essa primeira aventura solo. :)
-
 Sigo em constante aprendizado e buscando novas tecnologias como forma de amadurecer meus conhecimentos.
 
 # Licença
