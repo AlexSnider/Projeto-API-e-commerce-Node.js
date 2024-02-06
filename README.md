@@ -2,7 +2,7 @@
 
 O projeto foi desenvolvido para aplicação de conhecimentos adquiridos durante a faculdade e estudos pessoais. <br/>
 
-Após o commit versão 0.7.1, o projeto está sendo atualizado com novas features e tecnologias seguindo orientações do mentor [Vitor Hugo](https://www.linkedin.com/in/vitorhcs/).
+## Após o commit versão 0.7.1, o projeto está sendo atualizado com novas features e tecnologias seguindo orientações do mentor [Vitor Hugo](https://www.linkedin.com/in/vitorhcs/). <br/><br/>
 
 Essa aplicação é uma das partes do projeto mini e-commerce. Em específico, o back-end. <br/>
 
