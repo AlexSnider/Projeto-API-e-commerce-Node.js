@@ -15,8 +15,8 @@ O projeto foi desenvolvido para aplicação de conhecimentos adquiridos durante 
 * Paginação
 * Versionamento de API
 * Jmeter
-* Open Telemetry e Jaeger (em fase de implementação)
-* Docker (external - Keycloak e Open Telemetry)
+* OpenTelemetry e Jaeger (em fase de implementação)
+* Docker (external - Keycloak e OpenTelemetry)
 
 ### Essa aplicação é uma das partes do projeto mini e-commerce. Em específico, o back-end. <br/>
 
