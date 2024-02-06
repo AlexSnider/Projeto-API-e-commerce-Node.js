@@ -2,9 +2,22 @@
 
 O projeto foi desenvolvido para aplicação de conhecimentos adquiridos durante a faculdade e estudos pessoais. <br/>
 
-## Após o commit versão 0.7.1, o projeto está sendo atualizado com novas features e tecnologias seguindo orientações do mentor [Vitor Hugo](https://www.linkedin.com/in/vitorhcs/). <br/><br/>
+### Após o commit versão 0.7.1, o projeto está sendo atualizado com novas features e tecnologias seguindo as orientações do mentor [Vitor Hugo](https://www.linkedin.com/in/vitorhcs/).<br/>
 
-Essa aplicação é uma das partes do projeto mini e-commerce. Em específico, o back-end. <br/>
+### Adições:
+
+* Keycloak
+* Express Rate Limit
+* Headers (location)
+* Logs 5wLogs
+* Commits ES Linter (feat, chore, fix, etc...)
+* Paginação
+* Versionamento de API
+* Jmeter
+* Open Telemetry e Jaeger (em fase de implementação)
+* Docker (external - Keycloak e Open Telemetry)
+
+### Essa aplicação é uma das partes do projeto mini e-commerce. Em específico, o back-end. <br/>
 
 A aplicação pode `registrar/manejar usuários`, `ordens` e seus `itens`, `produtos` e `categorias`.
 
