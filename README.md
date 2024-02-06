@@ -8,6 +8,7 @@ O projeto foi desenvolvido para aplicação de conhecimentos adquiridos durante 
 
 * Keycloak
 * Express Rate Limit
+* Argon2
 * Headers (location)
 * Logs 5wLogs
 * Commits ES Linter (feat, chore, fix, etc...)
