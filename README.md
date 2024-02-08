@@ -14,7 +14,7 @@ O projeto foi desenvolvido para aplicação de conhecimentos adquiridos durante 
 * Commits ES Linter (feat, chore, fix, etc...)
 * Paginação
 * Versionamento de API
-* Jmeter
+* Jmeter (aplicação para teste de carga)
 * OpenTelemetry e Jaeger (em fase de implementação)
 * Docker (external - Keycloak e OpenTelemetry)
 
