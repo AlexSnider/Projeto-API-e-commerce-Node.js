@@ -1,0 +1,36 @@
+version: "3"
+
+services:
+  keycloak:
+    container_name: keycloak
+    image: quay.io/keycloak/keycloak:19.0.1
+    environment:
+      - KEYCLOAK_ADMIN=admin
+      - KEYCLOAK_ADMIN_PASSWORD=admin
+      - KC_DB=mysql
+      - KC_DB_USERNAME=admin
+      - KC_DB_PASSWORD=${KEYCLOAK_DB_PASSWORD}
+      - KC_DB_URL_HOST=db
+      - KC_DB_URL_PORT=3306
+      - KC_DB_SCHEMA=keycloak
+    ports:
+      - 8080:8080
+    command: start-dev
+    depends_on:
+      - db
+
+  otel-collector:
+    image: otel/opentelemetry-collector
+    volumes:
+      - ./otel-collector-config.yaml:/etc/otel-collector-config.yaml
+    ports:
+      - "4317:4317"
+      - "55678:55678"
+      - "55679:55679"
+    depends_on:
+      - jaeger
+
+  jaeger:
+    image: jaegertracing/all-in-one
+    ports:
+      - "16686:16686"

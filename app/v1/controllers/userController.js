@@ -3,16 +3,18 @@ const {
   NotFoundException,
 } = require("../controllers/customExceptions/customExceptions");
 
-const User = require("../../../models/User");
-const { createToken, createRefreshToken, verifyToken } = require("../../../JWT/JWT");
-const sendEmail = require("../mail/passwordMailer");
-const UserAccessToken = require("../../../models/UserAccessToken");
-const UserRefreshToken = require("../../../models/UserRefreshToken");
+require("dotenv").config();
+const JWT_SECRET = process.env.JWT_SECRET;
 const { Op } = require("sequelize");
 const argon2 = require("argon2");
 const logger = require("../../utils/logger");
+
+const User = require("../../../models/User");
+const sendEmail = require("../mail/passwordMailer");
+const UserAccessToken = require("../../../models/UserAccessToken");
+const UserRefreshToken = require("../../../models/UserRefreshToken");
+const { createToken, createRefreshToken } = require("../../../JWT/JWT");
 const { verify } = require("jsonwebtoken");
-const JWT_SECRET = process.env.JWT_SECRET;
 
 const userController = {};
 
@@ -272,6 +274,8 @@ userController.loginUser = async (req, res) => {
     }
 
     const user = await User.findOne({ where: { username } });
+
+    
 
     if (!user) {
       logger.warn(

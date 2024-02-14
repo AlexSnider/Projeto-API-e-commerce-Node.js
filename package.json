@@ -21,6 +21,7 @@
     "express-rate-limit": "^7.1.5",
     "express-session": "^1.18.0",
     "express-validator": "^7.0.1",
+    "getmac": "^6.6.0",
     "ip": "^1.1.8",
     "jsonwebtoken": "^9.0.2",
     "keycloak-connect": "^23.0.5",

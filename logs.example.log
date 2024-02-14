@@ -1,0 +1,1 @@
+[2024-02-14 11:16:31] [WARN] - User alex tried to login while already logged in, on Wed Feb 14 2024 11:16:31 GMT-0300 (Horário Padrão de Brasília), at endpoint "v1/users/login"
