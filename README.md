@@ -2,7 +2,23 @@
 
 O projeto foi desenvolvido para aplicação de conhecimentos adquiridos durante a faculdade e estudos pessoais. <br/>
 
-Essa aplicação é uma das partes do projeto mini e-commerce que estou projetando. Em específico, o back-end. <br/>
+### Após o commit versão 0.7.1, o projeto está sendo atualizado com novas features e tecnologias seguindo as orientações do mentor [Vitor Hugo](https://www.linkedin.com/in/vitorhcs/).<br/>
+
+### Adições:
+
+* Keycloak
+* Express Rate Limit
+* Argon2
+* Headers (location)
+* Logs 5wLogs
+* Commits ES Linter (feat, chore, fix, etc...)
+* Paginação
+* Versionamento de API
+* Jmeter (aplicação para teste de carga)
+* OpenTelemetry e Jaeger (em fase de implementação)
+* Docker (external - Keycloak e OpenTelemetry)
+
+### Essa aplicação é uma das partes do projeto mini e-commerce. Em específico, o back-end. <br/>
 
 A aplicação pode `registrar/manejar usuários`, `ordens` e seus `itens`, `produtos` e `categorias`.
 
@@ -90,8 +106,6 @@ Exemplo:
 Me propus a construir uma API com as tecnologias listadas e o resultado está sendo esse.
 A estrutura é simples, são pequenos gerenciamentos de uma mini loja, mas a ideia principal foi entregar algo de uso prático e estruturado.
 Houveram complicações em como manejar ordens e itens de maneira simultânea, mas consegui lidar com o desafio.
-
-A próxima ideia é criar um frontend para essa API e fechar essa primeira aventura solo. :)
 
 Sigo em constante aprendizado e buscando novas tecnologias como forma de amadurecer meus conhecimentos.
 
