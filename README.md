@@ -2,21 +2,24 @@
 
 O projeto foi desenvolvido para aplicação de conhecimentos adquiridos durante a faculdade e estudos pessoais. <br/>
 
-### Após o commit versão 0.7.1, o projeto está sendo atualizado com novas features e tecnologias seguindo as orientações do mentor [Vitor Hugo](https://www.linkedin.com/in/vitorhcs/).<br/>
+No momento, o projeto encontra-se em `CONSTANTE DESENVOLVIMENTO`. <br/>
+
+### Após o commit versão 0.7.1 (commits não padronizados), o projeto está sendo atualizado com novas features e tecnologias seguindo as orientações do mentor [Vitor Hugo](https://www.linkedin.com/in/vitorhcs/).<br/>
 
 ### Adições:
 
-* Keycloak
-* Express Rate Limit
-* Argon2
-* Headers (location)
-* Logs 5wLogs
-* Commits ES Linter (feat, chore, fix, etc...)
-* Paginação
-* Versionamento de API
-* Jmeter (aplicação para teste de carga)
-* OpenTelemetry e Jaeger (em fase de implementação)
-* Docker (external - Keycloak e OpenTelemetry)
+* Keycloak;
+* Express Rate Limit;
+* Argon2;
+* Headers (location);
+* Logs 5wLogs;
+* Commits ES Linter (feat, chore, fix, etc...);
+* Paginação;
+* Versionamento de API;
+* Jmeter (aplicação para teste de carga);
+* OpenTelemetry e Jaeger (em fase de implementação);
+* Docker (external - Keycloak, OpenTelemetry e Jaeger);
+* Jest - Testes unitários (em fase de implementação)
 
 ### Essa aplicação é uma das partes do projeto mini e-commerce. Em específico, o back-end. <br/>
 
@@ -108,6 +111,10 @@ A estrutura é simples, são pequenos gerenciamentos de uma mini loja, mas a ide
 Houveram complicações em como manejar ordens e itens de maneira simultânea, mas consegui lidar com o desafio.
 
 Sigo em constante aprendizado e buscando novas tecnologias como forma de amadurecer meus conhecimentos.
+
+Após o início da mentoria, pude conhecer inúmeras maneiras de melhorar a segurança e padrões da API.
+
+Busco atingir um alto nível técnico com esse projeto para posteriormente iniciar um novo, utiliando as tecnologias Typescript e Prisma.
 
 # Licença
 
