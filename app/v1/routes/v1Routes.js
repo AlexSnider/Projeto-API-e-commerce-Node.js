@@ -2,17 +2,21 @@ const express = require("express");
 const session = require("express-session");
 const KEYCLOAK_SECRET = process.env.KEYCLOAK_SESSION_SECRET;
 const Keycloak = require("keycloak-connect");
-const limiter = require("../../utils/rateLimit");
-const checkMacAddress = require("../../utils/rateLimit");
+const routeLimiter = require("../../utils/routeRateLimiter");
+const globalRateLimiter = require("../../utils/globalRateLimiter");
+const checkMacAddress = require("../../utils/routeRateLimiter");
 const getmac = require("getmac");
 const ip = require("ip");
 
 const router = express.Router();
 
 const userController = require("../controllers/userController");
-const productsController = require("../controllers/productsControler");
+const productsController = require("../controllers/productsController");
 const categoriesController = require("../controllers/categoriesController");
 const ordersController = require("../controllers/ordersController");
+
+// GLOBAL RATE LIMITER
+router.use(globalRateLimiter);
 
 // KEYCLOAK CONFIG
 router.use(session({ secret: KEYCLOAK_SECRET, resave: false, saveUninitialized: true }));
@@ -32,8 +36,11 @@ router.use((req, res, next) => {
 });
 
 // ROUTES UNDER TEST
-router.post("/v1/login", checkMacAddress, limiter, userController.loginUser);
+router.post("/v1/login", checkMacAddress, routeLimiter, userController.loginUser);
 router.get("/v1/product/:id", keycloak.protect(), productsController.getProductById);
+
+// ROUTE UNDER TDD
+router.get("/v1/all-products", productsController.getProducts);
 
 //
 //
@@ -50,7 +57,6 @@ router.post("/v1/logout", userController.logoutUser);
 
 // PRODUCTS ROUTES
 router.post("/v1/products", productsController.createProduct);
-router.get("/v1/all-products", productsController.getProducts);
 router.get("/v1/products/category/:categoryId", productsController.getProductsByCategory);
 router.put("/v1/update-product/:id", productsController.updateProduct);
 router.delete("/v1/delete-product/:id", productsController.deleteProduct);

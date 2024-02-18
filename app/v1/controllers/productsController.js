@@ -1,7 +1,7 @@
 const {
   CustomValidationException,
   NotFoundException,
-} = require("../controllers/customExceptions/customExceptions");
+} = require("./customExceptions/customExceptions");
 
 const Products = require("../../../models/Products");
 const Categories = require("../../../models/Categories");
@@ -86,9 +86,7 @@ productsController.getProductById = async (req, res) => {
     const product = await Products.findOne({ where: { id } });
 
     if (!product) {
-      return res
-        .status(404)
-        .json({ error: true, message: "Oops! Something went wrong." });
+      return res.status(404).json({ error: true, message: "Oops! Something went wrong." });
     }
 
     res.status(200).json({ error: false, product });
@@ -135,9 +133,7 @@ productsController.updateProduct = async (req, res) => {
     const product = await Products.findOne({ where: { id } });
 
     if (!product) {
-      return res
-        .status(404)
-        .json({ error: true, message: "Oops! Something went wrong." });
+      return res.status(404).json({ error: true, message: "Oops! Something went wrong." });
     }
 
     const updateAttributes = {
@@ -184,9 +180,7 @@ productsController.deleteProduct = async (req, res) => {
     const product = await Products.findOne({ where: { id } });
 
     if (!product) {
-      return res
-        .status(404)
-        .json({ error: true, message: "Oops! Something went wrong." });
+      return res.status(404).json({ error: true, message: "Oops! Something went wrong." });
     }
 
     await Products.destroy({ where: { id } });

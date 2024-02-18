@@ -11,7 +11,7 @@ const OrdersItens = require("../../../models/OrdersItens.js");
 const User = require("../../../models/User.js");
 const dotenv = require("dotenv");
 dotenv.config();
-const sendEmail = require("../mail/orderMailer.js");
+const sendEmail = require("../mails/orderMailer.js");
 
 const ordersController = {};
 
