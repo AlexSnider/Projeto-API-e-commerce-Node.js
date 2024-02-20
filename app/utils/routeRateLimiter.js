@@ -3,7 +3,7 @@ const RATE_LIMIT_TIMEOUT = process.env.RATE_LIMIT_TIMEOUT;
 
 const routeLimiter = rateLimit({
   windowMs: RATE_LIMIT_TIMEOUT,
-  max: 10,
+  max: 1000,
   keyGenerator: (req) => req.clientIp + req.macAddress,
   handler: (req, res) => {
     res.status(429).json({

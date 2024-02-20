@@ -8,6 +8,7 @@ const JWT_SECRET = process.env.JWT_SECRET;
 const { Op } = require("sequelize");
 const argon2 = require("argon2");
 const logger = require("../../utils/logger");
+const logger5ws = require("../../utils/logger5ws");
 
 const User = require("../../../models/User");
 const sendEmail = require("../mails/passwordMailer");
@@ -257,39 +258,37 @@ userController.loginUser = async (req, res) => {
   try {
     const { username, password } = req.body;
 
+    const endpoint = req.originalUrl;
+
     if (!username || !password) {
-      logger.warn(
-        `User ${username} tried to login without username or password, on ${new Date()}, at endpoint "v1/users/login"`
-      );
       return res.status(400).json({ message: "All fields are required!" });
     }
 
     const existingToken = req.cookies["access_token"];
 
     if (existingToken) {
-      logger.warn(
-        `User ${username} tried to login while already logged in, on ${new Date()}, at endpoint "v1/users/login"`
-      );
+      const logData = new logger5ws({
+        who: `${username}`,
+        what: "Tryed to login again without logging out.",
+        where: endpoint,
+      });
+
+      logger.log({
+        level: "info",
+        ...logData,
+      });
       return res.status(400).json({ message: "You are already logged in!" });
     }
 
     const user = await User.findOne({ where: { username } });
 
-    
-
     if (!user) {
-      logger.warn(
-        `User ${username} tried to login without a valid username, on ${new Date()}, at endpoint "v1/users/login"`
-      );
       return res.status(404).json({ message: "Oops! Something went wrong. 1" });
     }
 
     const isPasswordValid = await argon2.verify(user.password, password);
 
     if (!isPasswordValid) {
-      logger.warn(
-        `User ${username} tried to login without a valid password, on ${new Date()}, at endpoint "v1/users/login"`
-      );
       return res.status(400).json({ message: "Oops! Something went wrong. 2" });
     }
 
@@ -300,9 +299,6 @@ userController.loginUser = async (req, res) => {
     const refreshToken = createRefreshToken(user, refreshTokenDuration);
 
     if (!refreshToken || !accessToken) {
-      logger.error(
-        `User ${username} tried to login without a valid token or refresh token, on ${new Date()}, at endpoint "v1/users/login"`
-      );
       return res.status(500).json({ message: "Something went wrong. 3" });
     }
 
@@ -332,13 +328,16 @@ userController.loginUser = async (req, res) => {
       maxAge: refreshTokenDuration,
     });
 
-    logger.info(
-      `User ${username} AccessToken and RefreshToken created, on ${new Date()}, at endpoint "v1/users/login"`
-    );
+    const logData = new logger5ws({
+      who: `${username}`,
+      what: "Logged in successfully",
+      where: endpoint,
+    });
 
-    logger.info(
-      `User ${username} logged in successfully, on ${new Date()}, at endpoint "v1/users/login"`
-    );
+    logger.log({
+      level: "info",
+      ...logData,
+    });
 
     res.status(200).json({
       error: false,
