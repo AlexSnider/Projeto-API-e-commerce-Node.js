@@ -32,6 +32,7 @@
     "express-validator": "^7.0.1",
     "getmac": "^6.6.0",
     "ip": "^1.1.8",
+    "ipify": "^6.0.0",
     "jaeger-client": "^3.19.0",
     "jsonwebtoken": "^9.0.2",
     "keycloak-connect": "^23.0.5",

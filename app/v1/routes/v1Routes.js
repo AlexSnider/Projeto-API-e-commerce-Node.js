@@ -3,9 +3,9 @@ const session = require("express-session");
 const cors = require("cors");
 const KEYCLOAK_SECRET = process.env.KEYCLOAK_SESSION_SECRET;
 const Keycloak = require("keycloak-connect");
-const routeLimiter = require("../../utils/routeRateLimiter");
-const globalRateLimiter = require("../../utils/globalRateLimiter");
-const checkMacAddress = require("../../utils/routeRateLimiter");
+const routeLimiter = require("../../utils/rate_limit/routeRateLimiter");
+const globalRateLimiter = require("../../utils/rate_limit/globalRateLimiter");
+const checkMacAddress = require("../../utils/rate_limit/routeRateLimiter");
 const getmac = require("getmac");
 const ip = require("ip");
 
