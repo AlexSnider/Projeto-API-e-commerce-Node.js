@@ -1,4 +1,4 @@
-# Projeto API para mini e-commerce
+# Projeto API para mini e-commerce - 1.0
 
 O projeto foi desenvolvido para aplicação de conhecimentos adquiridos durante a faculdade e estudos pessoais. <br/>
 
