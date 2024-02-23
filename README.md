@@ -114,7 +114,7 @@ Sigo em constante aprendizado e buscando novas tecnologias como forma de amadure
 
 Após o início da mentoria, pude conhecer inúmeras maneiras de melhorar a segurança e padrões da API.
 
-Busco atingir um alto nível técnico com esse projeto para posteriormente iniciar um novo, utiliando as tecnologias Typescript e Prisma.
+Busco atingir um alto nível técnico com esse projeto para posteriormente iniciar um novo, utilizando as tecnologias Typescript e Prisma.
 
 # Licença
 
