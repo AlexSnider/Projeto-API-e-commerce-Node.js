@@ -8,18 +8,20 @@ No momento, o projeto encontra-se em `CONSTANTE DESENVOLVIMENTO`. <br/>
 
 ### Adições:
 
-* Keycloak;
-* Express Rate Limit;
-* Argon2;
-* Headers (location);
-* Logs 5wLogs;
-* Commits ES Linter (feat, chore, fix, etc...);
-* Paginação;
-* Versionamento de API;
-* Jmeter (aplicação para teste de carga);
-* OpenTelemetry e Jaeger (em fase de implementação);
-* Docker (external - Keycloak, OpenTelemetry e Jaeger);
-* Jest - Testes unitários (em fase de implementação)
+* Keycloak; (2), (3)
+* Express Rate Limit; (1)
+* Argon2; (1)
+* Headers (location); (1)
+* Logs 5wLogs + Tracer Id, Span; (1)
+* Commits ES Linter (feat, chore, fix, etc...); (2)
+* Paginação; (1)
+* Versionamento de API; (1)
+* Jmeter (aplicação para teste de carga); (2)
+* OpenTelemetry e Jaeger; (1)
+* Docker (Keycloak e Jaeger); (1)
+* Jest - Testes unitários; (2), (3) <br/><br/>
+
+(1) `Implementado` - (2) `Implementado parcialmente` - (3) `Em estudo`
 
 ### Essa aplicação é uma das partes do projeto mini e-commerce. Em específico, o back-end. <br/>
 
