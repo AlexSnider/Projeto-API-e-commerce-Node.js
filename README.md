@@ -16,7 +16,7 @@ No momento, o projeto encontra-se em `CONSTANTE DESENVOLVIMENTO`. <br/>
 * Commits ES Linter (feat, chore, fix, etc...); (2)
 * Paginação; (1)
 * Versionamento de API; (1)
-* Jmeter (aplicação para teste de carga); (2)
+* Jmeter; (2)
 * OpenTelemetry e Jaeger; (1)
 * Docker (Keycloak e Jaeger); (1)
 * Jest - Testes unitários; (2), (3) <br/><br/>
