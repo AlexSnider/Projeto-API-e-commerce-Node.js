@@ -4,6 +4,8 @@ O projeto foi desenvolvido para aplicação de conhecimentos adquiridos durante 
 
 No momento, o projeto encontra-se em `CONSTANTE DESENVOLVIMENTO`. <br/>
 
+Versão 2.0 com TypeScript e Prisma: [v2.0](https://github.com/AlexSnider/Mini-E-commerce-TS-Prisma).
+
 ### Após o commit versão 0.7.1 (commits não padronizados), o projeto está sendo atualizado com novas features e tecnologias seguindo as orientações do mentor [Vitor Hugo](https://www.linkedin.com/in/vitorhcs/).<br/>
 
 ### Adições:
