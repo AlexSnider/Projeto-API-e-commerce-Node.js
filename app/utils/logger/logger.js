@@ -7,7 +7,9 @@ const logger = createLogger({
     format.timestamp({ format: "YYYY-MM-DD HH:mm:ss" }),
     format.printf((log) => {
       const logInstance = new logger5ws(log);
-      return `[${log.timestamp}] [${log.level.toUpperCase()}] - ${logInstance.log()}`;
+      return `[${log.timestamp} | Tracer ID:${log.trace_id} | Span ID:${
+        log.span_id
+      }] [${log.level.toUpperCase()}] - ${logInstance.log()}`;
     })
   ),
   transports: [

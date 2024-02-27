@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "nodemon": "nodemon index.js",
+    "start": "nodemon 'node index.js'",
     "test": "jest"
   },
   "author": "",
@@ -16,6 +16,7 @@
     "@opentelemetry/exporter-jaeger": "^1.21.0",
     "@opentelemetry/exporter-metrics-otlp-proto": "^0.48.0",
     "@opentelemetry/exporter-trace-otlp-proto": "^0.48.0",
+    "@opentelemetry/instrumentation-winston": "^0.34.0", 
     "@opentelemetry/node": "^0.24.0",
     "@opentelemetry/plugin-http": "^0.18.2",
     "@opentelemetry/sdk-node": "^0.48.0",
