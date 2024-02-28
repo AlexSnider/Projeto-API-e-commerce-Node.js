@@ -7,7 +7,8 @@ require("dotenv").config();
 const JWT_SECRET = process.env.JWT_SECRET;
 const { Op } = require("sequelize");
 const argon2 = require("argon2");
-const logger = require("../../utils/logger");
+const logger = require("../../utils/logger/logger");
+const logger5ws = require("../../utils/logger/logger5ws");
 
 const User = require("../../../models/User");
 const sendEmail = require("../mails/passwordMailer");
@@ -22,7 +23,20 @@ userController.createUser = async (req, res) => {
   try {
     const { username, email, password } = req.body;
 
+    const endpoint = req.originalUrl;
+
     if (!username || !email || !password) {
+      const logData = new logger5ws({
+        who: `${username}`,
+        what: "Tryed to create an account without username, email or password.",
+        where: endpoint,
+      });
+
+      logger.log({
+        level: "warn",
+        ...logData,
+      });
+
       return res.status(400).json({ message: "All fields are required!" });
     }
 
@@ -34,8 +48,30 @@ userController.createUser = async (req, res) => {
 
     if (existingUser) {
       if (existingUser.username === username) {
+        const logData = new logger5ws({
+          who: `${username}`,
+          what: "Tryed to create an account with an existing username.",
+          where: endpoint,
+        });
+
+        logger.log({
+          level: "warn",
+          ...logData,
+        });
+
         return res.status(400).json({ message: "Oops! Something went wrong. Try again." });
       } else if (existingUser.email === email) {
+        const logData = new logger5ws({
+          who: `${username}`,
+          what: "Tryed to create an account with an existing email.",
+          where: endpoint,
+        });
+
+        logger.log({
+          level: "warn",
+          ...logData,
+        });
+
         return res.status(400).json({ message: "Oops! Something went wrong. Try again." });
       }
     }
@@ -55,6 +91,17 @@ userController.createUser = async (req, res) => {
 
       const users = await User.findOne({ where: { email } });
       res.location(`/v1/users/${users.id}`);
+
+      const logData = new logger5ws({
+        who: `${username}`,
+        what: "Created an account.",
+        where: endpoint,
+      });
+
+      logger.log({
+        level: "info",
+        ...logData,
+      });
 
       res.status(201).json({
         error: false,
@@ -82,7 +129,20 @@ userController.resetPassword = async (req, res) => {
   try {
     const { email, username } = req.body;
 
+    const endpoint = req.originalUrl;
+
     if (!email || !username) {
+      const logData = new logger5ws({
+        who: `${username}`,
+        what: "Tryed to reset password without email or username.",
+        where: endpoint,
+      });
+
+      logger.log({
+        level: "warn",
+        ...logData,
+      });
+
       return res.status(400).json({ error: true, message: "All fields are required!" });
     }
 
@@ -93,6 +153,17 @@ userController.resetPassword = async (req, res) => {
     });
 
     if (!userData) {
+      const logData = new logger5ws({
+        who: `${username}`,
+        what: "Tryed to reset password without existing username or email.",
+        where: endpoint,
+      });
+
+      logger.log({
+        level: "warn",
+        ...logData,
+      });
+
       return res.status(404).json({ error: true, message: "Oops! Something went wrong." });
     }
 
@@ -107,6 +178,17 @@ userController.resetPassword = async (req, res) => {
 
     sendEmail(email, username, resetToken);
 
+    const logData = new logger5ws({
+      who: `${username}`,
+      what: "Requested password reset.",
+      where: endpoint,
+    });
+
+    logger.log({
+      level: "info",
+      ...logData,
+    });
+
     res.status(200).json({
       error: false,
       message: "Password reset link has been sent to the E-mail registered.",
@@ -120,25 +202,61 @@ userController.resetPasswordLoggedUser = async (req, res) => {
   try {
     const token = req.cookies["access_token"];
 
+    const endpoint = req.originalUrl;
+
     if (!token) {
       return res.status(400).json({ message: "Token is required!" });
     }
 
     const decodedUser = verify(token, JWT_SECRET, { complete: true }, (err, decoded) => {
       if (err) {
-        return res.status(400).json({ message: "Oops! Something went wrong." });
+        return res.status(400).json({ message: "Oops! Token is invalid." });
       }
 
       return decoded.payload.id;
     });
 
+    if (decodedUser) {
+      const logData = new logger5ws({
+        who: `${decodedUser}`,
+        what: "Is trying to change it's password.",
+        where: endpoint,
+      });
+
+      logger.log({
+        level: "info",
+        ...logData,
+      });
+    }
+
     const { oldPassword, password, confirmPassword } = req.body;
 
     if (!oldPassword || !password || !confirmPassword) {
+      const logData = new logger5ws({
+        who: `${decodedUser}`,
+        what: "Tryed to reset password without oldPassword, password or confirmPassword.",
+        where: endpoint,
+      });
+
+      logger.log({
+        level: "warn",
+        ...logData,
+      });
       return res.status(400).json({ message: "All fields are required!" });
     }
 
     if (password !== confirmPassword) {
+      const logData = new logger5ws({
+        who: `${decodedUser}`,
+        what: "Tryed to reset password without matching password.",
+        where: endpoint,
+      });
+
+      logger.log({
+        level: "warn",
+        ...logData,
+      });
+
       return res
         .status(400)
         .json({ message: "The confirmation of the password does not match. Try again." });
@@ -147,6 +265,16 @@ userController.resetPasswordLoggedUser = async (req, res) => {
     const findUser = await User.findOne({ where: { id: decodedUser } });
 
     if (!findUser) {
+      const logData = new logger5ws({
+        who: `${decodedUser}`,
+        what: "Tryed to reset password but user does not exist in the database.",
+        where: endpoint,
+      });
+
+      logger.log({
+        level: "warn",
+        ...logData,
+      });
       return res.status(404).json({ message: "Oops! Something went wrong." });
     }
 
@@ -155,12 +283,33 @@ userController.resetPasswordLoggedUser = async (req, res) => {
     });
 
     if (!findAccessToken) {
+      const logData = new logger5ws({
+        who: `${decodedUser}`,
+        what: "Tryed to reset password but Access Token is invalid.",
+        where: endpoint,
+      });
+
+      logger.log({
+        level: "warn",
+        ...logData,
+      });
+
       return res.status(404).json({ message: "Invalid token!" });
     }
 
     const isPasswordValid = await argon2.verify(findUser.password, oldPassword);
 
     if (!isPasswordValid) {
+      const logData = new logger5ws({
+        who: `${decodedUser}`,
+        what: "Tryed to reset password but oldPassword is invalid.",
+        where: endpoint,
+      });
+
+      logger.log({
+        level: "warn",
+        ...logData,
+      });
       return res.status(400).json({ message: "Something went wrong. Try again." });
     }
 
@@ -177,6 +326,17 @@ userController.resetPasswordLoggedUser = async (req, res) => {
 
     res.clearCookie("access_token");
     res.clearCookie("refresh_token");
+
+    const logData = new logger5ws({
+      who: `${decodedUser}`,
+      what: "Tryed to reset password and changed it's password. Cookies were cleared.",
+      where: endpoint,
+    });
+
+    logger.log({
+      level: "info",
+      ...logData,
+    });
 
     res
       .status(200)
@@ -196,17 +356,47 @@ userController.changePasswordConfirmation = async (req, res) => {
   try {
     const { token } = req.params;
 
+    const endpoint = req.originalUrl;
+
     if (!token) {
       return res.status(400).json({ message: "Token is required!" });
     }
+    const decodedUser = verify(token, JWT_SECRET, { complete: true }, (err, decoded) => {
+      if (err) {
+        return res.status(400).json({ message: "Oops! Token is invalid." });
+      }
 
+      return decoded.payload.id;
+    });
     const { password, confirmPassword } = req.body;
 
     if (!password || !confirmPassword) {
+      const logData = new logger5ws({
+        who: `${decodedUser}`,
+        what: "Tryed to reset password but user does not exist in the database.",
+        where: endpoint,
+      });
+
+      logger.log({
+        level: "warn",
+        ...logData,
+      });
+
       return res.status(400).json({ message: "All fields are required!" });
     }
 
     if (password !== confirmPassword) {
+      const logData = new logger5ws({
+        who: `${decodedUser}`,
+        what: "Tryed to change password but passwords do not match.",
+        where: endpoint,
+      });
+
+      logger.log({
+        level: "warn",
+        ...logData,
+      });
+
       return res.status(400).json({ message: "Something went wrong. Try again. 1" });
     }
 
@@ -215,6 +405,16 @@ userController.changePasswordConfirmation = async (req, res) => {
     });
 
     if (!userResetPasswordToken) {
+      const logData = new logger5ws({
+        who: `${decodedUser}`,
+        what: "Tryed to reset password but Reset Password Token does not exist in the database.",
+        where: endpoint,
+      });
+
+      logger.log({
+        level: "warn",
+        ...logData,
+      });
       return res.status(400).json({ message: "Something went wrong. Try again. 3" });
     }
 
@@ -227,6 +427,16 @@ userController.changePasswordConfirmation = async (req, res) => {
     const isDifferent = !(await argon2.verify(userResetPasswordToken.password, String(password)));
 
     if (!isDifferent) {
+      const logData = new logger5ws({
+        who: `${decodedUser}`,
+        what: "Tryed to reset password but new password is the same as old.",
+        where: endpoint,
+      });
+
+      logger.log({
+        level: "warn",
+        ...logData,
+      });
       return res.status(400).json({ message: "Oops! Something went wrong. Try again. 6" });
     }
 
@@ -236,8 +446,29 @@ userController.changePasswordConfirmation = async (req, res) => {
     );
 
     if (updatedRows === 0) {
+      const logData = new logger5ws({
+        who: `${decodedUser}`,
+        what: "Tryed to reset password but zero rows were updated.",
+        where: endpoint,
+      });
+
+      logger.log({
+        level: "warn",
+        ...logData,
+      });
       return res.status(404).json({ message: "Oops! Something went wrong. 7" });
     }
+
+    const logData = new logger5ws({
+      who: `${decodedUser}`,
+      what: "Tryed to reset password and changed it's password successfully.",
+      where: endpoint,
+    });
+
+    logger.log({
+      level: "info",
+      ...logData,
+    });
 
     res
       .status(200)
@@ -257,40 +488,72 @@ userController.loginUser = async (req, res) => {
   try {
     const { username, password } = req.body;
 
+    const endpoint = req.originalUrl;
+
     if (!username || !password) {
-      logger.warn(
-        `User ${username} tried to login without username or password, on ${new Date()}, at endpoint "v1/users/login"`
-      );
+      const logData = new logger5ws({
+        who: `${username}`,
+        what: "Tryed to login without username or password.",
+        where: endpoint,
+      });
+
+      logger.log({
+        level: "warn",
+        ...logData,
+      });
+
       return res.status(400).json({ message: "All fields are required!" });
     }
 
     const existingToken = req.cookies["access_token"];
 
     if (existingToken) {
-      logger.warn(
-        `User ${username} tried to login while already logged in, on ${new Date()}, at endpoint "v1/users/login"`
-      );
+      const logData = new logger5ws({
+        who: `${username}`,
+        what: "Tryed to login again without logging out.",
+        where: endpoint,
+      });
+
+      logger.log({
+        level: "warn",
+        ...logData,
+      });
+
       return res.status(400).json({ message: "You are already logged in!" });
     }
 
     const user = await User.findOne({ where: { username } });
 
-    
-
     if (!user) {
-      logger.warn(
-        `User ${username} tried to login without a valid username, on ${new Date()}, at endpoint "v1/users/login"`
-      );
-      return res.status(404).json({ message: "Oops! Something went wrong. 1" });
+      const logData = new logger5ws({
+        who: `${username}`,
+        what: "Tryed to login with wrong username.",
+        where: endpoint,
+      });
+
+      logger.log({
+        level: "warn",
+        ...logData,
+      });
+
+      return res.status(404).json({ message: "Oops! Something went wrong..." });
     }
 
     const isPasswordValid = await argon2.verify(user.password, password);
 
     if (!isPasswordValid) {
-      logger.warn(
-        `User ${username} tried to login without a valid password, on ${new Date()}, at endpoint "v1/users/login"`
-      );
-      return res.status(400).json({ message: "Oops! Something went wrong. 2" });
+      const logData = new logger5ws({
+        who: `${username}`,
+        what: "Tryed to login with wrong password.",
+        where: endpoint,
+      });
+
+      logger.log({
+        level: "warn",
+        ...logData,
+      });
+
+      return res.status(400).json({ message: "Oops! Try again..." });
     }
 
     const acessTokenDuration = 24 * 60 * 60 * 1000;
@@ -300,10 +563,18 @@ userController.loginUser = async (req, res) => {
     const refreshToken = createRefreshToken(user, refreshTokenDuration);
 
     if (!refreshToken || !accessToken) {
-      logger.error(
-        `User ${username} tried to login without a valid token or refresh token, on ${new Date()}, at endpoint "v1/users/login"`
-      );
-      return res.status(500).json({ message: "Something went wrong. 3" });
+      const logData = new logger5ws({
+        who: `${username}`,
+        what: "Had either an invalid refresh token or an invalid access token.",
+        where: endpoint,
+      });
+
+      logger.log({
+        level: "critical",
+        ...logData,
+      });
+
+      return res.status(500).json({ message: "Oops! Something went wrong..." });
     }
 
     await UserAccessToken.create({
@@ -332,17 +603,20 @@ userController.loginUser = async (req, res) => {
       maxAge: refreshTokenDuration,
     });
 
-    logger.info(
-      `User ${username} AccessToken and RefreshToken created, on ${new Date()}, at endpoint "v1/users/login"`
-    );
+    const logData = new logger5ws({
+      who: `${username}`,
+      what: "Logged in successfully",
+      where: endpoint,
+    });
 
-    logger.info(
-      `User ${username} logged in successfully, on ${new Date()}, at endpoint "v1/users/login"`
-    );
+    logger.log({
+      level: "info",
+      ...logData,
+    });
 
     res.status(200).json({
       error: false,
-      message: "If logged in successfully you will be redirected.",
+      message: "If logged in successfully you will be redirected...",
     });
   } catch (error) {
     if (error instanceof CustomValidationException) {

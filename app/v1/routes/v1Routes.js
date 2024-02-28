@@ -1,10 +1,11 @@
 const express = require("express");
 const session = require("express-session");
+const cors = require("cors");
 const KEYCLOAK_SECRET = process.env.KEYCLOAK_SESSION_SECRET;
 const Keycloak = require("keycloak-connect");
-const routeLimiter = require("../../utils/routeRateLimiter");
-const globalRateLimiter = require("../../utils/globalRateLimiter");
-const checkMacAddress = require("../../utils/routeRateLimiter");
+const routeLimiter = require("../../utils/rate_limit/routeRateLimiter");
+const globalRateLimiter = require("../../utils/rate_limit/globalRateLimiter");
+const checkMacAddress = require("../../utils/rate_limit/routeRateLimiter");
 const getmac = require("getmac");
 const ip = require("ip");
 
@@ -17,6 +18,15 @@ const ordersController = require("../controllers/ordersController");
 
 // GLOBAL RATE LIMITER
 router.use(globalRateLimiter);
+
+// CORS
+router.use(
+  cors({
+    origin: "*",
+    credentials: true,
+    methods: ["GET", "POST", "PUT", "DELETE"],
+  })
+);
 
 // KEYCLOAK CONFIG
 router.use(session({ secret: KEYCLOAK_SECRET, resave: false, saveUninitialized: true }));

@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "nodemon": "nodemon index.js",
+    "start": "nodemon 'node index.js'",
     "test": "jest"
   },
   "author": "",
@@ -16,6 +16,7 @@
     "@opentelemetry/exporter-jaeger": "^1.21.0",
     "@opentelemetry/exporter-metrics-otlp-proto": "^0.48.0",
     "@opentelemetry/exporter-trace-otlp-proto": "^0.48.0",
+    "@opentelemetry/instrumentation-winston": "^0.34.0", 
     "@opentelemetry/node": "^0.24.0",
     "@opentelemetry/plugin-http": "^0.18.2",
     "@opentelemetry/sdk-node": "^0.48.0",
@@ -32,6 +33,7 @@
     "express-validator": "^7.0.1",
     "getmac": "^6.6.0",
     "ip": "^1.1.8",
+    "ipify": "^6.0.0",
     "jaeger-client": "^3.19.0",
     "jsonwebtoken": "^9.0.2",
     "keycloak-connect": "^23.0.5",
@@ -46,6 +48,7 @@
     "winston": "^3.11.0"
   },
   "devDependencies": {
+    "axios": "^1.6.7",
     "git-commit-msg-linter": "^5.0.6",
     "jest": "^29.7.0",
     "sequelize-cli": "^6.6.2",

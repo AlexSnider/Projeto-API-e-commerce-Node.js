@@ -1,1 +1,1 @@
-[2024-02-14 11:16:31] [WARN] - User alex tried to login while already logged in, on Wed Feb 14 2024 11:16:31 GMT-0300 (Horário Padrão de Brasília), at endpoint "v1/users/login"
+[2024-02-27 07:49:15 | Tracer ID:4183316aa95f62133193d3b2d21dda95 | Span ID:15955f89e1785840] [WARN] - User alex | From * | Tryed to login again without logging out. | At /v1/login | On * | Reason *
