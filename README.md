@@ -2,7 +2,7 @@
 
 O projeto foi desenvolvido para aplicação de conhecimentos adquiridos durante a faculdade e estudos pessoais. <br/>
 
-No momento, o projeto encontra-se em `CONSTANTE DESENVOLVIMENTO`. <br/>
+No momento, o projeto encontra-se em `PAUSA`. <br/>
 
 Versão 2.0 com TypeScript e Prisma: [v2.0](https://github.com/AlexSnider/Mini-E-commerce-TS-Prisma).
 
